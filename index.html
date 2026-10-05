@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SparFino 1.0 · Verkaufsbeta</title>
+<style>
+:root{
+  --bg:#071f1a;
+  --panel:#0b2e26;
+  --panel2:#0f3b31;
+  --gold:#c7a45d;
+  --gold2:#e6d19a;
+  --cream:#f4efe4;
+  --muted:#aebdb7;
+  --line:rgba(199,164,93,.28);
+  --danger:#d98878;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;background:
+radial-gradient(circle at 50% 15%,rgba(199,164,93,.12),transparent 30%),
+linear-gradient(180deg,#0b3027 0%,#071f1a 100%);color:var(--cream)}
+button,input,select{font:inherit}
+body{display:flex;justify-content:center;padding:22px}
+.app{width:min(1180px,100%);min-height:92vh}
+.hidden{display:none!important}
+
+/* WELCOME */
+.welcome{
+  min-height:92vh;border:1px solid rgba(230,209,154,.45);border-radius:30px;
+  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.005));
+  box-shadow:0 24px 100px rgba(0,0,0,.38);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:50px 28px;position:relative;overflow:hidden;
+}
+.welcome:before,.welcome:after{
+  content:"";position:absolute;border:1px solid rgba(230,209,154,.07);border-radius:50%;
+  width:620px;height:620px
+}
+.welcome:before{top:-390px;left:-260px}
+.welcome:after{bottom:-420px;right:-250px}
+.compass{
+  width:132px;height:132px;border:2px solid var(--gold);border-radius:50%;
+  display:grid;place-items:center;position:relative;margin-bottom:20px;
+  box-shadow:0 0 50px rgba(199,164,93,.18)
+}
+.compass:before,.compass:after{content:"";position:absolute;background:var(--gold)}
+.compass:before{width:2px;height:92px}
+.compass:after{height:2px;width:92px}
+.needle{
+  width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;
+  border-bottom:42px solid var(--gold2);transform:translateY(-6px);
+}
+.brand{font-size:68px;font-weight:850;letter-spacing:-2px;margin:0}
+.brand .fino{color:var(--gold)}
+.tagline{font-size:13px;letter-spacing:3px;color:var(--gold2);font-weight:800;margin-top:8px}
+.claim{font-size:30px;line-height:1.35;font-weight:700;max-width:780px;margin:38px 0 12px}
+.claim strong{color:var(--gold2)}
+.lead{max-width:660px;color:var(--muted);font-size:16px;line-height:1.65}
+.cta{
+  margin-top:34px;border:1px solid var(--gold);background:transparent;color:var(--gold2);
+  border-radius:999px;padding:17px 34px;font-weight:800;letter-spacing:1px;cursor:pointer;
+  transition:.2s
+}
+.cta:hover{background:var(--gold);color:var(--bg);transform:translateY(-1px)}
+.trust{margin-top:36px;font-size:11px;letter-spacing:2px;color:var(--gold2);font-weight:700}
+
+/* DASHBOARD */
+.dashboard{min-height:92vh;background:#f4f5f2;border-radius:30px;color:#17352d;overflow:hidden;box-shadow:0 24px 100px rgba(0,0,0,.35)}
+.topbar{background:#0c332a;color:white;padding:18px 26px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:24px;font-weight:850;letter-spacing:-.5px}
+.logo span{color:var(--gold2)}
+.nav{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;max-width:100%;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+.nav button,.ghost{
+  border:1px solid rgba(255,255,255,.16);background:transparent;color:#e8efec;
+  padding:9px 13px;border-radius:999px;cursor:pointer;font-weight:700;white-space:nowrap;flex:0 0 auto
+}
+.nav button.active{
+  background:var(--gold);color:#0c332a;border-color:var(--gold);
+  box-shadow:inset 0 -3px 0 rgba(12,51,42,.28),0 4px 14px rgba(0,0,0,.14)
+}
+.content{padding:34px}
+.hero-grid{display:grid;grid-template-columns:1.6fr .8fr;gap:20px}
+.hero-card,.side-card,.stat,.section{
+  background:white;border:1px solid #dfe5e1;border-radius:20px
+}
+.hero-card{padding:34px;text-align:center}
+.hero-label{font-size:17px;color:#62716b;font-weight:700}
+.hero-value{font-size:58px;font-weight:900;color:#0f4c3d;margin:14px 0 8px;letter-spacing:-1px}
+.hero-sub{color:#71807a}
+.side-card{padding:24px}
+.side-card h3{margin:0 0 12px;color:#0f4c3d}
+.side-card p{color:#65736e;line-height:1.55}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.stat{padding:20px}
+.stat .k{font-size:13px;color:#70807a;margin-bottom:8px}
+.stat .v{font-size:26px;font-weight:850;color:#17352d}
+.stat .v.positive{color:#0f6b50}
+.stat .v.negative{color:#8c4638}
+.section{margin-top:20px;padding:24px}
+.section h3{margin:0 0 14px;color:#0f4c3d}
+.row{display:flex;justify-content:space-between;gap:18px;padding:13px 0;border-bottom:1px solid #edf0ee}
+.row:last-child{border-bottom:0}
+.muted{color:#71807a}
+.amount{font-weight:800}
+.booking-action{
+  position:fixed;right:34px;bottom:28px;display:flex;align-items:center;gap:10px;
+  border:0;background:#0f4c3d;color:white;border-radius:999px;padding:13px 18px 13px 13px;
+  font-weight:850;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.24);z-index:3
+}
+.booking-action:hover{transform:translateY(-1px)}
+.booking-plus{
+  width:32px;height:32px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:#0b3027;font-size:23px;line-height:1;font-weight:900
+}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding:20px;z-index:5;overflow-y:auto}
+.modal-card{width:min(520px,96vw);background:#f7f7f4;border-radius:22px;padding:26px;color:#17352d;margin:auto;max-height:calc(100vh - 40px);overflow-y:auto}
+.modal-card h3{margin-top:0}
+.field{margin:14px 0}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#64736d}
+.field input,.field select{
+  width:100%;padding:12px 13px;border:1px solid #cad4cf;border-radius:12px;background:white
+}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;position:sticky;bottom:-26px;background:#f7f7f4;padding:14px 0 6px;z-index:2}
+.primary{background:#0f4c3d;color:white;border:0;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
+.secondary{background:white;border:1px solid #cdd6d2;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
+.note{font-size:12px;color:#75817c;margin-top:10px}
+
+
+.calc-box{max-width:520px;margin:24px auto 0;border-top:1px solid #e4e9e6;padding-top:14px;text-align:left}
+.calc-box div{display:flex;justify-content:space-between;gap:20px;padding:6px 0;color:#65736e;font-size:14px}
+.calc-box strong{color:#29463e}
+.calc-box .calc-result{border-top:1px solid #d7dfdb;margin-top:7px;padding-top:12px;font-size:15px;font-weight:800}
+.calc-box .calc-result strong{color:#0f4c3d}
+.recurring-form{display:grid;grid-template-columns:1.2fr .7fr 1fr 1fr .8fr 1fr auto;gap:10px;align-items:end;margin:18px 0 22px}
+.recurring-form label{display:block;font-size:12px;font-weight:700;color:#64736d;margin-bottom:5px}
+.recurring-form input,.recurring-form select{width:100%;padding:10px;border:1px solid #cad4cf;border-radius:10px;background:white}
+.recurring-form button{height:41px}
+.freq{font-size:12px;color:#71807a;margin-top:3px}
+@media(max-width:900px){.recurring-form{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.recurring-form{grid-template-columns:1fr}}
+
+
+.clickable{cursor:pointer;transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.clickable:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(16,54,44,.08);border-color:#c8d4ce}
+.hero-card.clickable:after{content:"Berechnung ansehen →";display:block;margin-top:18px;font-size:12px;font-weight:800;color:#8a7446;letter-spacing:.4px}
+.stat.clickable:after{content:"Details →";display:block;margin-top:10px;font-size:11px;font-weight:800;color:#8a7446}
+.detail-head{max-width:760px;margin:4px auto 22px;text-align:center}
+.detail-head h2{font-size:34px;color:#0f4c3d;margin:8px 0}
+.detail-head p{color:#71807a;line-height:1.6}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#9a7e43;font-weight:900;margin-top:18px}
+.back-detail{border:0;background:transparent;color:#557069;font-weight:800;cursor:pointer;padding:8px 0}
+.calculation-detail{max-width:680px;margin-left:auto;margin-right:auto}
+.calculation-detail .calc-box{display:block;margin-top:0}
+.explain-note{margin-top:20px;padding:16px 18px;background:#f3f5f2;border-radius:14px;color:#63736d;font-size:13px;line-height:1.55}
+
+/* RESPONSIVE */
+@media(max-width:820px){
+  .topbar{align-items:flex-start;gap:12px;flex-direction:column}
+  .nav{width:100%}
+
+  .modal{padding:10px}
+  .modal-card{max-height:calc(100vh - 20px);padding:20px}
+  .actions{bottom:-20px}
+
+  body{padding:0}
+  .app{width:100%}
+  .welcome,.dashboard{border-radius:0;min-height:100vh}
+  .brand{font-size:50px}
+  .claim{font-size:23px}
+  .hero-grid,.stats{grid-template-columns:1fr}
+  .content{padding:20px}
+  .booking-action{right:18px;bottom:18px}
+}
+
+
+.booking-list{
+  display:flex;flex-direction:column;gap:8px;overflow-x:auto;padding-bottom:4px
+}
+.booking-head,.booking-entry{
+  display:grid;
+  grid-template-columns:125px 95px 150px minmax(220px,1fr) 120px;
+  gap:14px;align-items:center;
+  min-width:760px
+}
+.booking-head{
+  padding:0 16px 8px;
+  font-size:11px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;color:#78847f
+}
+.booking-entry{
+  padding:13px 16px;border:1px solid #e2e7e4;border-radius:14px;background:#fff
+}
+.booking-date{font-size:13px;font-weight:800;color:#62716b;white-space:nowrap}
+.booking-type{font-size:13px;font-weight:800;color:#52645d;white-space:nowrap}
+.booking-category{font-weight:800;color:#17352d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.booking-desc{font-size:13px;color:#71807a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.booking-value{font-size:16px;font-weight:900;white-space:nowrap;text-align:right}
+.booking-value.expense{color:#8c4638}
+.booking-value.income{color:#0f6b50}
+.empty-bookings{padding:24px;text-align:center;color:#71807a;border:1px dashed #cdd6d2;border-radius:14px}
+
+
+
+/* 2.6c – Buchungsseite klar und vollbreit */
+#bookings{
+  width:100%;
+}
+#bookings .detail-head{
+  max-width:none;
+}
+#bookings .section{
+  max-width:none;
+  width:100%;
+  box-sizing:border-box;
+}
+#bookings .booking-page-shell{
+  width:100%;
+  box-sizing:border-box;
+  background:#ffffff;
+  border:1px solid #e1e7e3;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 8px 24px rgba(24,52,45,.06);
+}
+#bookings .booking-intro{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:18px;
+  margin-bottom:18px;
+}
+#bookings .booking-intro h2{margin:0 0 4px}
+#bookings .booking-intro p{margin:0;color:#6e7b75}
+#bookings .booking-list{
+  width:100%;
+  overflow-x:auto;
+  padding-bottom:6px;
+}
+#bookings .booking-head,
+#bookings .booking-entry{
+  display:grid;
+  grid-template-columns:120px 90px minmax(130px,1fr) minmax(180px,1.4fr) 130px;
+  gap:14px;
+  align-items:center;
+  min-width:720px;
+}
+#bookings .booking-head{
+  padding:0 14px 9px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+  color:#7a8681;
+}
+#bookings .booking-entry{
+  padding:14px;
+  margin-bottom:8px;
+  border:1px solid #e5ebe7;
+  border-radius:14px;
+  background:#fbfcfb;
+}
+#bookings .booking-date,
+#bookings .booking-type,
+#bookings .booking-category,
+#bookings .booking-desc{
+  min-width:0;
+}
+#bookings .booking-date{font-size:13px;font-weight:800;color:#62716b;white-space:nowrap}
+#bookings .booking-type{font-size:13px;font-weight:800;color:#52645d;white-space:nowrap}
+#bookings .booking-category{font-weight:800;color:#17352d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bookings .booking-desc{font-size:13px;color:#71807a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bookings .booking-value{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  text-align:right;
+  font-size:17px;
+  font-weight:900;
+  white-space:nowrap;
+  justify-self:end;
+  min-width:110px;
+}
+#bookings .booking-value.expense{color:#8f4438}
+#bookings .booking-value.income{color:#0f6c50}
+@media(max-width:760px){
+  #bookings .booking-page-shell{padding:14px}
+  #bookings .booking-intro{align-items:flex-start;flex-direction:column}
+}
+
+
+/* 2.7 – Buchungsansicht ohne gequetschte rechte Spalte */
+#bookings .booking-list{overflow:visible !important}
+#bookings .booking-head,
+#bookings .booking-entry{
+  min-width:0 !important;
+  width:100%;
+  grid-template-columns:110px 82px minmax(120px,.9fr) minmax(140px,1.4fr) 125px !important;
+}
+#bookings .booking-value{
+  position:static !important;
+  display:block !important;
+  min-width:115px !important;
+  text-align:right !important;
+}
+@media(max-width:700px){
+.booking-actions{justify-content:flex-start;flex-wrap:wrap}
+
+  #bookings .booking-head{display:none !important}
+  #bookings .booking-entry{
+    display:grid !important;
+    grid-template-columns:88px minmax(0,1fr) 112px !important;
+    grid-template-areas:
+      "date category value"
+      "type desc value";
+    gap:5px 10px !important;
+  }
+  #bookings .booking-date{grid-area:date}
+  #bookings .booking-type{grid-area:type}
+  #bookings .booking-category{grid-area:category}
+  #bookings .booking-desc{grid-area:desc}
+  #bookings .booking-value{
+    grid-area:value;
+    align-self:center;
+    justify-self:end;
+    min-width:105px !important;
+  }
+}
+
+
+/* 2.11 – saubere Bedeutung statt Sammelzahlen */
+.sparfino-stats-clean{grid-template-columns:repeat(4,minmax(0,1fr)) !important}
+.hero-card.deficit .hero-value{font-size:clamp(38px,6vw,68px)}
+.hero-card.deficit .hero-label{letter-spacing:.04em}
+@media(max-width:980px){.sparfino-stats-clean{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+@media(max-width:560px){.sparfino-stats-clean{grid-template-columns:1fr !important}}
+
+
+/* 2.12 – echter Monatsübertrag */
+.cashflow-strip{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0 0;padding:10px 4px;color:var(--muted,#6d756f);font-size:.92rem}
+.cashflow-strip strong{color:inherit}
+.tiny-note{font-size:.78rem;margin-top:5px;line-height:1.3}
+.balance-modal-card{max-width:520px}
+
+
+.booking-actions{display:flex;justify-content:flex-end;gap:6px}
+.booking-mini{border:1px solid rgba(244,227,161,.35);background:transparent;color:inherit;border-radius:8px;padding:6px 8px;cursor:pointer;font-size:12px}
+.booking-mini:hover{background:rgba(244,227,161,.10)}
+
+
+/* 2.16 – Startmonat und Ansichtsmonat sauber getrennt */
+.month-view-bar{
+  display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  margin:0 0 18px;padding:10px 12px;border:1px solid rgba(244,227,161,.22);
+  border-radius:14px;background:rgba(255,255,255,.025)
+}
+.month-view-bar button{
+  border:1px solid rgba(244,227,161,.35);background:transparent;color:inherit;
+  border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:800
+}
+.month-view-bar button:hover{background:rgba(244,227,161,.10)}
+.month-view-title{min-width:180px;text-align:center;font-weight:900;letter-spacing:.02em}
+.month-view-note{width:100%;text-align:center;font-size:.78rem;opacity:.68}
+
+
+.analysis-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:18px}
+.analysis-card{background:white;border:1px solid #dce5e1;border-radius:20px;padding:20px}
+.analysis-bars{display:flex;align-items:flex-end;gap:18px;height:220px;padding:28px 10px 4px;border-bottom:1px solid #d7dfdc}
+.analysis-month{flex:1;display:flex;gap:7px;align-items:flex-end;justify-content:center;height:100%;position:relative}
+.analysis-bar{width:min(42px,38%);border-radius:8px 8px 2px 2px;min-height:2px;background:#315e53}
+.analysis-bar.expense{background:#b88a49}
+.analysis-labels{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-top:8px;font-size:12px;font-weight:800}
+.analysis-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:#587069}
+.analysis-dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;background:#315e53}.analysis-dot.expense{background:#b88a49}
+.potential-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid #edf1ef}
+.potential-row:last-child{border-bottom:0}.potential-row strong{white-space:nowrap}
+.potential-note{font-size:12px;color:#647872;line-height:1.45;margin-top:3px}
+.analysis-total{font-size:28px;font-weight:900;margin:6px 0}.analysis-sub{color:#647872;font-size:13px;line-height:1.5}
+.category-bars{margin-top:14px}.cat-row{display:grid;grid-template-columns:minmax(110px,1fr) 2fr auto;gap:10px;align-items:center;margin:9px 0;font-size:13px}
+.cat-track{height:9px;background:#edf1ef;border-radius:999px;overflow:hidden}.cat-fill{height:100%;background:#58766d;border-radius:999px}
+@media(max-width:760px){.analysis-grid{grid-template-columns:1fr}.analysis-bars{height:190px}.cat-row{grid-template-columns:100px 1fr auto}}
+
+    .nav button.backup-action{
+      display:inline-flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      line-height:1.05;
+      min-width:86px;
+      white-space:normal;
+      padding-top:7px;
+      padding-bottom:7px;
+    }
+    .nav button.backup-action span{display:block}
+
+
+.onboarding-card{max-width:620px}
+.onboarding-step{display:none}.onboarding-step.active{display:block}
+.onboarding-progress{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin-bottom:8px}
+.onboarding-list{padding-left:20px;line-height:1.55}
+.onboarding-note{background:#eef3ef;border:1px solid rgba(23,53,45,.14);padding:12px 14px;border-radius:12px;margin:14px 0}
+.onboarding-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+.beta-badge{display:inline-block;margin-top:14px;padding:6px 10px;border:1px solid rgba(255,255,255,.25);border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.06em}
+
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#17352d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SparFino">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+</head>
+<body>
+<div class="app">
+  <section id="welcome" class="welcome">
+    <div class="compass"><div class="needle"></div></div>
+    <h1 class="brand">Spar<span class="fino">Fino</span></h1>
+    <div class="tagline">DEIN PERSÖNLICHER FINANZKOMPASS</div>
+    <div class="claim">
+      Nicht nur sehen, wie viel Geld du hast.<br>
+      Sondern wissen, wie viel du <strong>wirklich ausgeben kannst.</strong>
+    </div>
+    <div class="lead">
+      Klarheit über Einnahmen, feste Verpflichtungen und dein tatsächlich verfügbares Monatsbudget.
+    </div>
+    <button class="cta" onclick="openDashboard()">SPARFINO STARTEN →</button>
+    <div class="trust">FINANZDATEN BLEIBEN IN DIESEM BROWSER · KEINE BANKANBINDUNG</div><div class="beta-badge">VERKAUFSBETA · DEUTSCH</div>
+  </section>
+
+  <section id="dashboard" class="dashboard hidden">
+    <header class="topbar">
+      <div class="logo">Spar<span>Fino</span></div>
+      <nav class="nav">
+        <button id="nav-overview" class="active" onclick="showSection('overview')">Übersicht</button>
+        <button id="nav-bookings" onclick="showSection('bookings')">Buchungen</button>
+        <button id="nav-fixed" onclick="showSection('fixed')">Fixkosten</button>
+        <button id="nav-analysis" onclick="showSection('analysis')">Analyse</button>
+        <button class="backup-action" onclick="document.getElementById('importFile').click()" title="Eine zuvor exportierte JSON-Sicherung wieder in SparFino einlesen"><span>Sicherung</span><span>importieren</span></button>
+        <button class="backup-action" onclick="exportTestData()" title="Sicherungsdatei in den Download-Ordner speichern"><span>Sicherung</span><span>exportieren</span></button>
+        <button class="backup-action" onclick="runBackupSafetyTest()" title="Sicherung intern auf Wiederherstellbarkeit prüfen"><span>Sicherung</span><span>prüfen</span></button>
+        <button onclick="backToWelcome()">Startseite</button>
+      </nav>
+      <input id="importFile" type="file" accept="application/json,.json" style="display:none" onchange="importTestData(event)">
+    </header>
+
+    <main class="content">
+      <div class="month-view-bar" aria-label="Ansichtsmonat wählen">
+        <button type="button" onclick="changeViewMonth(-1)" aria-label="Vorheriger Monat">←</button>
+        <div id="viewMonthTitle" class="month-view-title">Ansichtsmonat</div>
+        <button type="button" onclick="changeViewMonth(1)" aria-label="Nächster Monat">→</button>
+        <div class="month-view-note">Ansichtsmonat · unabhängig vom Startmonat des Finanzbuchs</div>
+      </div>
+      <div id="overview">
+        <div class="hero-grid">
+          <div class="hero-card clickable" onclick="showSection('calculation')" title="Berechnung ansehen">
+            <div id="heroLabel" class="hero-label">Frei verfügbar im <span id="heroMonth">aktuellen Monat</span></div>
+            <div id="available" class="hero-value">1.990,00 €</div>
+            <div id="heroSub" class="hero-sub">Offene Verpflichtungen und die SparFino-Reserve sind bereits berücksichtigt.</div>
+            
+          </div>
+          <div class="side-card">
+            <h3>Finanzkompass</h3>
+            <p id="statusText">Du bist auf Kurs. Dein frei verfügbares Monatsbudget ist positiv.</p>
+          </div>
+        </div>
+
+        <div class="stats sparfino-stats-clean">
+          <div class="stat clickable" onclick="openOpeningDetails()"><div class="k">Monatsübertrag <span id="openingMonthLabel"></span></div><div id="openingBalanceHome" class="v">0,00 €</div><div class="muted tiny-note">aus dem Vormonat · Details anzeigen</div></div>
+          <div class="stat clickable" onclick="openReconcileModal()"><div class="k">Kontostand laut SparFino</div><div id="accountBalanceHome" class="v">0,00 €</div><div class="muted tiny-note">Buchungen bis heute · antippen zum Abgleichen</div></div>
+          <div class="stat clickable" onclick="openPlanningDetails('open')"><div class="k">Noch offene Verpflichtungen</div><div id="openObligationsHome" class="v negative">−0,00 €</div><div class="muted tiny-note">Details: nur tatsächlich offene Positionen</div></div>
+          <div class="stat clickable" onclick="openPlanningDetails('reserve')"><div class="k">SparFino-Reserve für später</div><div id="reserveHome" class="v negative">−0,00 €</div><div class="muted tiny-note">Details: Zusammensetzung der Reserve</div></div>
+        </div>
+
+        <div class="cashflow-strip">
+          <span>Eingegangen: <strong id="income">+0,00 €</strong></span>
+          <span>Ausgegeben: <strong id="spent">−0,00 €</strong></span>
+        </div>
+
+        <div class="section">
+          <h3>Vorausschau</h3>
+          <div id="forecastContent" class="row">
+            <div>
+              <strong>Nächste größere Verpflichtung</strong>
+              <div class="muted">Wird automatisch aus deinen Verpflichtungen berechnet.</div>
+            </div>
+            <div class="amount" id="reservePreview">–</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="calculation" class="hidden">
+        <div class="detail-head">
+          <button class="back-detail" onclick="showSection('overview')">← Zur Übersicht</button>
+          <div class="eyebrow">TRANSPARENT BERECHNET</div>
+          <h2>So kommt dein verfügbarer Betrag zustande<div class="muted" style="margin-top:8px">Doppelte Abzüge verhindert: Eine bezahlte Verpflichtung zählt als tatsächliche Ausgabe; nur der noch offene Rest bleibt zusätzlich reserviert.</div></h2>
+          <p>Hier siehst du die Rechnung im Detail. Auf der Startseite bleibt nur das Wesentliche.</p>
+        </div>
+        <div class="section calculation-detail">
+          <div class="calc-box">
+              <div><span>Startbestand des Monats</span><strong id="calcOpening">0,00 €</strong></div>
+              <div><span>+ Tatsächliche Einnahmen</span><strong id="calcIncome">+3.380,00 €</strong></div>
+              <div><span>− Tatsächliche Ausgaben</span><strong id="calcSpent">−365,00 €</strong></div>
+              <div><span>= Kontostand laut SparFino</span><strong id="calcAccountBalance">0,00 €</strong></div>
+              <div><span>Noch offene Verpflichtungen diesen Monat</span><strong id="calcCommitments">−0,00 €</strong></div>
+              <div><span>SparFino-Reserve für spätere Rechnungen</span><strong id="calcReserve">−0,00 €</strong></div>
+              <div class="calc-result"><span id="calcResultLabel">Frei verfügbar</span><strong id="calcAvailable">1.990,00 €</strong></div>
+            </div>
+          <div class="explain-note">SparFino rechnet intern centgenau. Es startet mit dem Monatsübertrag. Einnahmen und Ausgaben verändern daraus den Kontostand laut SparFino. Bereits gebuchte Ausgaben werden deshalb nicht ein zweites Mal abgezogen. Erst danach werden noch offene Verpflichtungen und die SparFino-Reserve berücksichtigt.</div>
+        </div>
+      </div>
+
+      <div id="bookings" class="hidden">
+        <div class="booking-page-shell">
+          <div class="booking-intro">
+            <div>
+              <button class="back-detail" onclick="showSection('overview')">← Zur Übersicht</button>
+              <div class="eyebrow" style="margin-top:14px">BUCHUNGEN</div>
+              <h2>Einnahmen & Ausgaben</h2>
+              <p>Alle tatsächlichen Buchungen – chronologisch und mit Betrag.</p>
+            </div>
+            <button type="button" class="primary" onclick="openModal()">+ Neue Buchung</button>
+          </div>
+          <div id="bookingList" class="booking-list"></div>
+        </div>
+      </div>
+
+      <div id="analysis" class="hidden">
+        <div class="detail-head">
+          <button class="back-detail" onclick="showSection('overview')">← Zur Übersicht</button>
+          <div class="eyebrow">MONATSANALYSE</div><h2>Ausgaben & Sparpotenzial</h2>
+          <p>Die Analyse basiert auf deinen tatsächlichen Buchungen. Erstattungen werden von den Ausgaben abgezogen; SparFino gibt daraus kein automatisches Sparversprechen.</p>
+        </div>
+        <div class="analysis-grid">
+          <div class="analysis-card">
+            <h3 id="analysisRangeTitle">Einnahmen und Ausgaben</h3>
+            <div id="analysisBars" class="analysis-bars"></div>
+            <div id="analysisLabels" class="analysis-labels"></div>
+            <div class="analysis-legend"><span><i class="analysis-dot"></i>Einnahmen</span><span><i class="analysis-dot expense"></i>Netto-Ausgaben</span></div>
+            <div id="analysisMonthSummary" class="analysis-sub" style="margin-top:14px"></div>
+          </div>
+          <div class="analysis-card">
+            <h3>Prüfbereiche</h3>
+            <div class="analysis-total">Aus Buchungen ableiten, nicht schätzen</div>
+            <div class="analysis-sub">SparFino nennt hier bewusst kein pauschales Sparziel. Erst Buchungen und Verträge prüfen, dann selbst entscheiden, was wirklich verzichtbar ist.</div>
+            <div id="potentialList" style="margin-top:12px"></div>
+          </div>
+          <div class="analysis-card">
+            <h3>Ausgaben im gewählten Monat</h3>
+            <div id="analysisCategoryTitle" class="analysis-sub"></div>
+            <div id="analysisCategories" class="category-bars"></div>
+          </div>
+          <div class="analysis-card">
+            <h3>Vier Arten von Ausgaben</h3>
+            <div class="potential-row"><div><b>Notwendig</b><div class="potential-note">z. B. Energie, Lebensmittel, Schule – nicht pauschal kürzen.</div></div></div>
+            <div class="potential-row"><div><b>Vertraglich gebunden</b><div class="potential-note">z. B. Versicherungen, Internet, Telefon – Tarif und Nutzen prüfen.</div></div></div>
+            <div class="potential-row"><div><b>Freiwillig / Konsum</b><div class="potential-note">z. B. Restaurant, einzelne Abos – hier kann ein persönliches Budget helfen.</div></div></div>
+            <div class="potential-row"><div><b>Sparen / Vermögensbildung</b><div class="potential-note">Nicht mit Konsum verwechseln; bei Engpässen grundsätzlich anpassbar.</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="fixed" class="hidden">
+        <div class="detail-head">
+          <button class="back-detail" onclick="showSection('overview')">← Zur Übersicht</button>
+          <div class="eyebrow">VERPFLICHTUNGEN</div><h2>Verträge & Fixkosten</h2>
+          <p>Geplante Verpflichtungen werden nur über eine eindeutige Zuordnung mit tatsächlichen Buchungen abgeglichen. Dadurch können ähnliche Begriffe keine falsche Verknüpfung auslösen.</p>
+        </div>
+        <div class="section">
+          <h3>Wiederkehrende Ausgaben</h3>
+          <div class="muted">Laufende Verpflichtungen und Rücklagen bleiben getrennt. Spätere größere Zahlungen werden bis zur Fälligkeit als Reserve berücksichtigt.</div>
+
+          <div class="recurring-form">
+            <div><label>Bezeichnung</label><input id="recName" placeholder="z. B. Versicherung"></div>
+            <div><label>Betrag</label><input id="recAmount" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00"></div>
+            <div><label>Rhythmus</label>
+              <select id="recFreq">
+                <option value="1">monatlich</option>
+                <option value="2">alle 2 Monate</option>
+                <option value="3">vierteljährlich</option>
+                <option value="6">halbjährlich</option>
+                <option value="12">jährlich</option>
+              </select>
+            </div>
+            <div><label>Nächste Fälligkeit</label><input id="recDue" type="date"></div>
+            <div><label>Bereits geschützt*</label><input id="recSaved" type="text" inputmode="decimal" autocomplete="off" value="0"></div>
+            <div><label>Zahlungsart</label>
+              <select id="recPayment">
+                <option>Lastschrift</option><option>Dauerauftrag</option><option>Überweisung</option><option>Kreditkarte</option>
+              </select>
+            </div>
+            <button class="primary" onclick="addRecurring()">Hinzufügen</button>
+          </div>
+
+          <div style="font-size:12px;opacity:.72;margin:10px 0 16px">* Nur Geld eintragen, das bereits außerhalb deines frei verfügbaren Geldes liegt. Eine bloße Sparabsicht zählt hier nicht.</div>
+          <div id="recurringList"></div>
+        </div>
+      </div>
+    </main>
+
+    <button class="booking-action" onclick="openModal()" title="Neue Buchung">
+      <span class="booking-plus">+</span><span>Neue Buchung</span>
+    </button>
+  </section>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <form id="bookingForm" novalidate>
+      <h3 id="bookingModalTitle">Neue Buchung</h3>
+      <input id="editingBookingId" type="hidden" value="">
+      <div id="bookingError" style="display:none;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:#f7dddd;color:#6d2020;font-size:14px"></div>
+
+      <div class="field">
+        <label>Art</label>
+        <select id="type">
+          <option value="expense">Ausgabe</option>
+          <option value="income">Einnahme</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Betrag</label>
+        <input id="amount" type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 100 oder 42,50">
+      </div>
+
+      <div class="field">
+        <label>Kategorie</label>
+        <select id="category">
+          <option>Lebensmittel</option>
+          <option>Mobilität</option>
+          <option>Restaurant</option>
+          <option>Freizeit</option>
+          <option>Gesundheit</option>
+          <option>Reparatur</option>
+          <option>Gehalt</option>
+          <option>Sonstiges</option>
+        </select>
+      <input id="customCategory" type="text" maxlength="50" placeholder="Eigene Kategorie, z. B. Bankgebühren, PayPal …" style="margin-top:8px">
+      </div>
+
+      <div class="field">
+        <label>Datum</label>
+        <input id="bookingDate" type="date">
+      </div>
+
+      <div class="field" id="recurringLinkField">
+        <label>Gehört diese Ausgabe zu einer Verpflichtung?</label>
+        <select id="recurringLink">
+          <option value="">Nein · normale Ausgabe</option>
+        </select>
+        <div class="note" style="margin-top:7px">Nur bewusst zuordnen. Auch eine frühere oder spätere Fälligkeit kann gewählt werden – z. B. Oktobermiete schon im September. SparFino rät nicht anhand ähnlicher Wörter.</div>
+      </div>
+
+      <div class="field">
+        <label>Beschreibung (optional)</label>
+        <input id="description" type="text" placeholder="freiwillig">
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" onclick="closeModal()">Abbrechen</button>
+        <button type="submit" class="primary" id="saveBookingBtn">Buchung speichern</button>
+      </div>
+      <div class="note">Buchungen und Fixkosten werden lokal in diesem Browser gespeichert.</div>
+    </form>
+  </div>
+</div>
+
+
+<div id="recurringChangeModal" class="modal hidden">
+  <div class="modal-card">
+    <h3>Verpflichtung ändern</h3>
+    <input id="changeRecurringId" type="hidden">
+    <div class="note" style="margin-bottom:14px">Die bisherige Verpflichtung bleibt historisch erhalten. Ab dem gewählten Datum gilt der neue Betrag.</div>
+    <div class="field"><label>Verpflichtung</label><input id="changeRecurringName" disabled></div>
+    <div class="field"><label>Neuer Betrag</label><input id="changeRecurringAmount" type="text" inputmode="decimal" autocomplete="off"></div>
+    <div class="field"><label>Gültig ab</label><input id="changeRecurringFrom" type="date"></div>
+    <div id="changeRecurringError" style="display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:#f7dddd;color:#6d2020"></div>
+    <div class="actions">
+      <button type="button" class="secondary" onclick="closeRecurringChange()">Abbrechen</button>
+      <button type="button" class="primary" onclick="saveRecurringChange()">Änderung übernehmen</button>
+    </div>
+  </div>
+</div>
+
+<div id="planningDetailsModal" class="modal hidden">
+  <div class="modal-card balance-modal-card">
+    <button class="modal-close" type="button" onclick="closePlanningDetails()" aria-label="Schließen">×</button>
+    <div class="eyebrow" id="planningDetailsEyebrow">PLANUNGSDETAILS</div>
+    <h2 id="planningDetailsTitle">Details</h2>
+    <p class="muted" id="planningDetailsIntro"></p>
+    <div id="planningDetailsList"></div>
+    <div class="calc-box" style="margin-top:16px">
+      <div class="calc-result"><span>Summe</span><strong id="planningDetailsTotal">0,00 €</strong></div>
+    </div>
+    <div class="actions" style="margin-top:16px">
+      <button type="button" class="primary" onclick="closePlanningDetails()">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<div id="openingDetailsModal" class="modal hidden">
+  <div class="modal-card balance-modal-card">
+    <button class="modal-close" type="button" onclick="closeOpeningDetails()" aria-label="Schließen">×</button>
+    <div class="eyebrow">MONATSÜBERTRAG</div>
+    <h2 id="openingDetailsTitle">Monatsübertrag</h2>
+    <p class="muted" id="openingDetailsText"></p>
+    <div class="detail-list">
+      <div class="detail-row"><div><strong>Übertrag in diesen Monat</strong><div class="muted" id="openingDetailsSource"></div></div><strong id="openingDetailsAmount">0,00 €</strong></div>
+    </div>
+    <div class="modal-actions"><button type="button" class="primary" onclick="closeOpeningDetails()">Schließen</button></div>
+    <div class="muted" style="margin-top:12px;font-size:.9rem">Dieser Monatsübertrag wird automatisch berechnet und hier nicht verändert.</div>
+  </div>
+</div>
+
+<div id="balanceModal" class="modal hidden">
+  <div class="modal-card balance-modal-card">
+    <button class="modal-close" type="button" onclick="closeBalanceModal()" aria-label="Schließen">×</button>
+    <div class="eyebrow">HISTORISCHER STARTPUNKT</div>
+    <h2>Ursprünglichen Startpunkt festlegen</h2>
+    <p class="muted">Dieser Wert ist nur der historische Ausgangspunkt der SparFino-Rechnung. Er ist nicht der Monatsübertrag des aktuell angezeigten Monats.</p>
+    <div class="field">
+      <label for="balanceAnchorMonth">Startmonat</label>
+      <input id="balanceAnchorMonth" type="month">
+    </div>
+    <div class="field">
+      <label for="balanceAnchorAmount">Kontostand am Monatsanfang</label>
+      <input id="balanceAnchorAmount" type="text" inputmode="decimal" oninput="previewBalanceInput()" placeholder="z. B. −1.204,57">
+      <div id="balanceParsedPreview" class="muted" style="margin-top:6px;font-size:.88rem">Du kannst auch „minus 1.204,57 Euro“ eingeben.</div>
+    </div>
+    <div id="balanceError" class="form-error" style="display:none"></div>
+    <div class="modal-actions">
+      <button type="button" class="secondary" onclick="closeBalanceModal()">Abbrechen</button>
+      <button type="button" class="primary" onclick="saveBalanceAnchor()">Übernehmen</button>
+    </div>
+    <div class="muted" style="margin-top:12px;font-size:.9rem">Wichtig: Das ist kein zusätzlicher Geldeingang. Der Startbestand wird nur einmal als Ausgangspunkt verwendet.</div>
+  </div>
+</div>
+
+<div id="reconcileModal" class="modal hidden">
+  <div class="modal-card balance-modal-card">
+    <button class="modal-close" type="button" onclick="closeReconcileModal()" aria-label="Schließen">×</button>
+    <div class="eyebrow">KONTOWAHRHEIT</div>
+    <h2>Kontostand abgleichen</h2>
+    <p class="muted">Trage den tatsächlichen Bankkontostand ein, nachdem alle aktuell in SparFino erfassten Buchungen berücksichtigt sind. Das ist keine Einnahme, sondern ein neuer sicherer Abgleichpunkt.</p>
+    <div class="field"><label for="reconcileDate">Stand vom</label><input id="reconcileDate" type="date"></div>
+    <div class="field"><label for="reconcileAmount">Tatsächlicher Kontostand</label><input id="reconcileAmount" type="text" inputmode="decimal" placeholder="z. B. 600,00"></div>
+    <div id="reconcileError" class="form-error" style="display:none"></div><div style="margin:14px 0 6px"><strong>Letzte Kontoabgleiche</strong></div>
+    <div id="reconcileHistory" class="muted" style="font-size:.9rem;line-height:1.55"></div>
+    <div class="modal-actions"><button type="button" class="secondary" onclick="closeReconcileModal()">Abbrechen</button><button type="button" class="primary" onclick="saveReconciliation()">Abgleichen</button></div>
+    <div class="muted" style="margin-top:12px;font-size:.9rem">Spätere neu erfasste Buchungen werden ab diesem Abgleichpunkt weitergerechnet. Frühere Monate bleiben unverändert nachvollziehbar.</div>
+  </div>
+</div>
+
+
+<div id="onboardingModal" class="modal hidden">
+  <div class="modal-card onboarding-card">
+    <div id="onboardingStep1" class="onboarding-step active">
+      <div class="onboarding-progress">Schritt 1 von 3</div>
+      <h2>Willkommen bei SparFino</h2>
+      <p>SparFino beantwortet eine Frage: <strong>Was kannst du wirklich ausgeben?</strong></p>
+      <div class="onboarding-note">Deine Finanzdaten werden in dieser Version lokal in diesem Browser gespeichert. Es gibt keine Bankanbindung und keinen automatischen Abruf deiner Kontodaten.</div>
+      <ul class="onboarding-list">
+        <li>Kontostand = deine aktuelle Kontowahrheit</li>
+        <li>Verpflichtungen = Geld, das noch fällig wird</li>
+        <li>Reserve = Geld für spätere bekannte Rechnungen</li>
+      </ul>
+      <div class="onboarding-actions"><button class="primary" type="button" onclick="onboardingNext(2)">Weiter</button></div>
+    </div>
+    <div id="onboardingStep2" class="onboarding-step">
+      <div class="onboarding-progress">Schritt 2 von 3</div>
+      <h2>Mit deinem echten Kontostand starten</h2>
+      <p>Trage den Kontostand ein, den deine Bank jetzt tatsächlich zeigt. SparFino behandelt ihn als Abgleichpunkt – nicht als Einnahme.</p>
+      <div class="field"><label for="onboardingBalance">Aktueller Kontostand</label><input id="onboardingBalance" type="text" inputmode="decimal" placeholder="z. B. 1.250,00"></div>
+      <div class="field"><label for="onboardingDate">Stand vom</label><input id="onboardingDate" type="date"></div>
+      <div id="onboardingError" class="form-error" style="display:none"></div>
+      <div class="onboarding-actions"><button class="secondary" type="button" onclick="onboardingNext(1)">Zurück</button><button class="primary" type="button" onclick="saveOnboardingBalance()">Kontostand übernehmen</button></div>
+    </div>
+    <div id="onboardingStep3" class="onboarding-step">
+      <div class="onboarding-progress">Schritt 3 von 3</div>
+      <h2>Jetzt deine Verpflichtungen eintragen</h2>
+      <p>Erfasse anschließend Miete, Energie, Versicherungen, Abos und andere feste Zahlungen unter <strong>Fixkosten</strong>. Nur dann kann SparFino zuverlässig zeigen, was frei verfügbar ist.</p>
+      <div class="onboarding-note"><strong>Wichtig:</strong> SparFino ist ein Planungswerkzeug. Prüfe Beträge und Fälligkeiten gegen deine Bank- und Vertragsunterlagen.</div>
+      <div class="onboarding-actions"><button class="secondary" type="button" onclick="finishOnboarding('overview')">Zur Übersicht</button><button class="primary" type="button" onclick="finishOnboarding('fixed')">Fixkosten eintragen</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="systemErrorBanner" style="display:none;position:fixed;left:16px;right:16px;top:16px;z-index:9999;background:#7a1f1f;color:#fff;padding:12px 16px;border-radius:12px;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,.22)">SparFino-Systemcheck fehlgeschlagen</div>
+
+<div id="saveToast" style="position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#f4e3a1;color:#17352d;padding:11px 16px;border-radius:999px;font-weight:700;z-index:20;display:none;box-shadow:0 8px 30px rgba(0,0,0,.22)">
+  <span id="saveToastText">Buchung gespeichert</span>
+  <button id="undoBtn" type="button" onclick="undoLastBookingChange()" style="display:none;margin-left:10px;border:1px solid rgba(23,53,45,.35);background:transparent;color:#17352d;border-radius:999px;padding:5px 9px;font-weight:800;cursor:pointer">Rückgängig</button>
+</div>
+
+<script>
+const STORAGE_BOOKINGS='sparfino_dictatfix_no_legacy_bookings'; // legacy migration only
+const STORAGE_RECURRING='sparfino_dictatfix_no_legacy_recurring'; // legacy migration only
+const STORAGE_BALANCE_ANCHOR='sparfino_dictatfix_no_legacy_anchor'; // legacy migration only
+const STORAGE_STATE='sparfino_state_v1';
+const PRIOR_STATE_KEYS=[];
+const DATA_SCHEMA_VERSION=4;
+
+const now=new Date();
+// Der Ansichtsmonat ist unabhängig vom Startmonat (balanceAnchor).
+// Bestehende Rechenfunktionen verwenden weiterhin planning*, jetzt aber ausschließlich als VIEW-Monat.
+let planningYear=now.getFullYear();
+let planningMonth=now.getMonth()+1;
+let planningKey=monthKey(planningYear,planningMonth);
+
+function pad2(v){return String(v).padStart(2,'0')}
+function monthKey(y,m){return `${y}-${pad2(m)}`}
+function monthIndex(y,m){return y*12+(m-1)}
+function monthName(m){return new Intl.DateTimeFormat('de-DE',{month:'long'}).format(new Date(2024,m-1,1))}
+let sparfinoTestToday=null;
+function isoToday(){
+  if(sparfinoTestToday) return sparfinoTestToday;
+  const d=new Date();
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+function parseIsoDate(iso){
+  const [y,m,d]=String(iso||'').split('-').map(Number);
+  return {y,m,d};
+}
+function deDate(iso){
+  if(!iso) return '–';
+  const {y,m,d}=parseIsoDate(iso);
+  return `${pad2(d)}.${pad2(m)}.${y}`;
+}
+function dateLabel(iso){
+  if(iso===isoToday()) return `Heute · ${deDate(iso)}`;
+  return deDate(iso);
+}
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function formatEuroInput(cents){
+  return (Number(cents||0)/100).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function euroCents(cents){
+  return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format((Number(cents)||0)/100);
+}
+function euro(v){ return euroCents(Math.round((Number(v)||0)*100)); } // legacy/display helper only
+function parseEuroToCents(value){
+  let s=String(value??'').trim().toLowerCase();
+  if(!s) return NaN;
+
+  // Voice/dictation friendly: "minus 1.204,57 Euro" is valid.
+  let negative=/\bminus\b/.test(s) || /[-−–—]/.test(s);
+  s=s.replace(/\bminus\b/g,'')
+     .replace(/\b(euro|eur)\b/g,'')
+     .replace(/[€\s\u00A0'’]/g,'')
+     .replace(/[−–—]/g,'-')
+     .replace(/[+-]/g,'');
+  if(!s || !/^[0-9.,]+$/.test(s)) return NaN;
+
+  let euros='',cents='';
+  const comma=s.lastIndexOf(','),dot=s.lastIndexOf('.');
+  if(comma>=0){
+    euros=s.slice(0,comma).replace(/[.,]/g,'');
+    cents=s.slice(comma+1);
+  }else if(dot>=0){
+    const parts=s.split('.');
+    // German-first: one dot followed by exactly 3 digits = thousands separator.
+    if(parts.length>2 || (parts.length===2 && parts[1].length===3)){
+      euros=parts.join(''); cents='';
+    }else{
+      euros=parts[0]; cents=parts[1]||'';
+    }
+  }else euros=s;
+
+  if(!/^\d+$/.test(euros||'0') || (cents && !/^\d{1,2}$/.test(cents))) return NaN;
+  const total=Number(euros||'0')*100+Number((cents+'00').slice(0,2));
+  if(!Number.isSafeInteger(total)) return NaN;
+  return negative?-total:total;
+}
+function parseEuroInput(value){
+  const cents=parseEuroToCents(value);
+  return Number.isFinite(cents)?cents/100:NaN; // compatibility for old self-checks
+}
+function centsFromLegacyEuros(v){
+  const n=Number(v);
+  return Number.isFinite(n)?Math.round(n*100):0;
+}
+function uid(prefix='id'){
+  return prefix+'-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
+}
+function safeLoad(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw) return fallback;
+    const parsed=JSON.parse(raw);
+    return Array.isArray(parsed)?parsed:fallback;
+  }catch(e){ return fallback; }
+}
+function safeLoadObject(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw) return fallback;
+    const parsed=JSON.parse(raw);
+    return parsed && typeof parsed==='object' && !Array.isArray(parsed) ? parsed : fallback;
+  }catch(e){ return fallback; }
+}
+function normalizeBooking(b){
+  const amountCents=Number.isSafeInteger(b?.amountCents) ? b.amountCents : centsFromLegacyEuros(b?.amount);
+  return {
+    id:String(b?.id||uid('book')),
+    date:String(b?.date||isoToday()),
+    type:['income','expense','refund','transfer'].includes(b?.type)?b.type:'expense',
+    category:String(b?.category||'Sonstiges'),
+    amountCents:Math.max(0,amountCents),
+    desc:String(b?.desc||''),
+    recurringId:b?.recurringId?String(b.recurringId):null,
+    obligationPeriod:b?.obligationPeriod?String(b.obligationPeriod):null,
+    obligationInstanceId:b?.obligationInstanceId?String(b.obligationInstanceId):null,
+    createdAt:Number(b?.createdAt)||Date.now()
+  };
+}
+function normalizeRecurring(r){
+  const amountCents=Number.isSafeInteger(r?.amountCents) ? r.amountCents : centsFromLegacyEuros(r?.amount);
+  const savedCents=Number.isSafeInteger(r?.savedCents) ? r.savedCents : centsFromLegacyEuros(r?.saved);
+  return {
+    id:String(r?.id||uid('rec')), name:String(r?.name||'Verpflichtung'),
+    amountCents:Math.max(0,amountCents), freq:[1,2,3,6,12].includes(Number(r?.freq))?Number(r.freq):1,
+    due:String(r?.due||isoToday()), payment:String(r?.payment||'Überweisung'),
+    savedCents:Math.max(0,Math.min(savedCents,amountCents)), category:String(r?.category||'Sonstiges'),
+    effectiveFrom:/^\d{4}-\d{2}$/.test(String(r?.effectiveFrom||''))?String(r.effectiveFrom):planningKey,
+    activeUntil:/^\d{4}-\d{2}-\d{2}$/.test(String(r?.activeUntil||''))?String(r.activeUntil):null,
+    endedAt:/^\d{4}-\d{2}-\d{2}$/.test(String(r?.endedAt||''))?String(r.endedAt):null,
+    predecessorId:r?.predecessorId?String(r.predecessorId):null
+  };
+}
+function normalizeObligationInstance(o){
+  return {
+    id:String(o?.id||uid('obl')),
+    recurringId:o?.recurringId?String(o.recurringId):null,
+    name:String(o?.name||'Verpflichtung'),
+    dueDate:String(o?.dueDate||isoToday()),
+    amountCents:Number.isSafeInteger(o?.amountCents)?Math.max(0,o.amountCents):0,
+    protectedCents:Number.isSafeInteger(o?.protectedCents)?Math.max(0,Math.min(o.protectedCents,o.amountCents||0)):0,
+    category:String(o?.category||'Sonstiges'),
+    payment:String(o?.payment||'Überweisung'),
+    createdAt:Number(o?.createdAt)||Date.now()
+  };
+}
+function normalizeReconciliation(r){
+  return {
+    id:String(r?.id||uid('recon')),
+    date:/^\d{4}-\d{2}-\d{2}$/.test(String(r?.date||''))?String(r.date):isoToday(),
+    amountCents:Number.isSafeInteger(r?.amountCents)?r.amountCents:centsFromLegacyEuros(r?.amount),
+    createdAt:Number(r?.createdAt)||Date.now(),
+    bookingCutoffCreatedAt:Number(r?.bookingCutoffCreatedAt)||0
+  };
+}
+function normalizeAnchor(a){
+  return {
+    month:/^\d{4}-\d{2}$/.test(String(a?.month||''))?String(a.month):planningKey,
+    amountCents:Number.isSafeInteger(a?.amountCents)?a.amountCents:centsFromLegacyEuros(a?.amount)
+  };
+}
+const EMBEDDED_MIGRATION_STATE=null;
+function loadState(){
+  // 2.17-Migrationsdatei: Wenn dieser neue Dateipfad noch leer ist, werden die
+  // bereits gesicherten Testdaten einmalig übernommen. Vorhandene Daten werden nie überschrieben.
+  let clean=localStorage.getItem(STORAGE_STATE);
+  if(!clean){
+    for(const oldKey of PRIOR_STATE_KEYS){
+      const candidate=localStorage.getItem(oldKey);
+      if(!candidate)continue;
+      try{
+        const parsed=JSON.parse(candidate);
+        if(parsed&&Number(parsed.schemaVersion)===DATA_SCHEMA_VERSION){
+          localStorage.setItem(STORAGE_STATE,candidate);
+          localStorage.setItem('sparfino_release_migrated_from',oldKey);
+          clean=candidate;break;
+        }
+      }catch(e){console.warn('Alten SparFino-Datenstand übersprungen:',oldKey,e)}
+    }
+  }
+  if(!clean){
+    try{
+      const seed=EMBEDDED_MIGRATION_STATE;
+      if(seed && Number(seed.schemaVersion)===DATA_SCHEMA_VERSION && Array.isArray(seed.bookings)){
+        localStorage.setItem(STORAGE_STATE,JSON.stringify(seed));
+        localStorage.setItem('sparfino_migration_notice_v10final',String(seed.bookings.length));
+        clean=localStorage.getItem(STORAGE_STATE);
+      }
+    }catch(e){console.error('Automatische Datenübernahme fehlgeschlagen:',e)}
+  }
+  if(!clean){
+    return {schemaVersion:DATA_SCHEMA_VERSION,bookings:[],recurring:[],obligationInstances:[],balanceAnchor:{month:planningKey,amountCents:0},reconciliations:[]};
+  }
+
+  try{
+    const raw=localStorage.getItem(STORAGE_STATE);
+    if(raw){
+      const state=JSON.parse(raw);
+      if(state && Number(state.schemaVersion)===DATA_SCHEMA_VERSION){
+        return {
+          bookings:Array.isArray(state.bookings)?state.bookings.map(normalizeBooking):[],
+          recurring:Array.isArray(state.recurring)?state.recurring.map(normalizeRecurring):[],
+          obligationInstances:Array.isArray(state.obligationInstances)?state.obligationInstances.map(normalizeObligationInstance):[],
+          balanceAnchor:normalizeAnchor(state.balanceAnchor),
+          reconciliations:Array.isArray(state.reconciliations)?state.reconciliations.map(normalizeReconciliation):[]
+        };
+      }
+    }
+  }catch(e){ console.error('SparFino-State konnte nicht gelesen werden:',e); }
+
+  // One-time migration from 2.12/older prototype storage.
+  const legacyBookings=safeLoad(STORAGE_BOOKINGS,defaultBookings);
+  const legacyRecurring=safeLoad(STORAGE_RECURRING,defaultRecurring);
+  const legacyAnchor=safeLoadObject(STORAGE_BALANCE_ANCHOR,{month:planningKey,amount:0});
+  return {
+    bookings:legacyBookings.map(normalizeBooking),
+    recurring:legacyRecurring.map(normalizeRecurring),
+    obligationInstances:[],
+    balanceAnchor:normalizeAnchor(legacyAnchor),
+    reconciliations:[]
+  };
+}
+function safeSave(){
+  try{
+    const state={
+      schemaVersion:DATA_SCHEMA_VERSION,
+      savedAt:new Date().toISOString(),
+      bookings,recurring,obligationInstances,balanceAnchor,reconciliations
+    };
+    localStorage.setItem(STORAGE_STATE,JSON.stringify(state)); // one state, one write
+    return true;
+  }catch(e){
+    console.error('SparFino konnte lokal nicht speichern:',e);
+    return false;
+  }
+}
+
+const defaultRecurring=[
+  {id:'rent',name:'Miete',amount:950,freq:1,due:'2026-01-01',payment:'Dauerauftrag',saved:0,category:'Wohnen'},
+  {id:'internet',name:'Internet',amount:45,freq:1,due:'2026-01-05',payment:'Lastschrift',saved:0,category:'Kommunikation'},
+  {id:'phone',name:'Handy',amount:30,freq:1,due:'2026-01-12',payment:'Lastschrift',saved:0,category:'Kommunikation'},
+  {id:'car-insurance',name:'Kfz-Versicherung',amount:1200,freq:12,due:'2026-12-28',payment:'Lastschrift',saved:0,category:'Versicherung'}
+];
+const defaultBookings=[
+  {id:'b-salary',date:`${planningYear}-${pad2(planningMonth)}-01`,type:'income',category:'Gehalt',amount:3380,desc:'Monatseinkommen',recurringId:null,obligationPeriod:null,createdAt:1},
+  {id:'b-food',date:`${planningYear}-${pad2(planningMonth)}-05`,type:'expense',category:'Lebensmittel',amount:120,desc:'Demo-Buchung',recurringId:null,obligationPeriod:null,createdAt:2},
+  {id:'b-mob',date:`${planningYear}-${pad2(planningMonth)}-08`,type:'expense',category:'Mobilität',amount:82,desc:'Demo-Buchung',recurringId:null,obligationPeriod:null,createdAt:3}
+];
+
+const loadedState=loadState();
+let recurring=loadedState.recurring;
+let bookings=loadedState.bookings;
+let obligationInstances=loadedState.obligationInstances||[];
+let balanceAnchor=loadedState.balanceAnchor;
+let reconciliations=loadedState.reconciliations||[];
+// Wichtig: Der Startmonat ist nur der Rechenanker.
+// Der Ansichtsmonat bleibt beim aktuellen Kalendermonat und wird NICHT mehr auf den Startmonat gesetzt.
+ensureObligationInstances();
+safeSave();
+function bookingPeriod(b){
+  const {y,m}=parseIsoDate(b.date);
+  return monthKey(y,m);
+}
+function currentMonthBookings(){return bookings.filter(b=>bookingPeriod(b)===planningKey)}
+function viewMonthCutoff(){
+  const today=isoToday(), todayKey=today.slice(0,7);
+  if(planningKey<todayKey) return `${planningKey}-${pad2(new Date(planningYear,planningMonth,0).getDate())}`;
+  if(planningKey===todayKey) return today;
+  return null; // Zukunft: noch keine tatsächlichen Buchungen als Kontowahrheit zählen.
+}
+function currentIncome(){
+  const cutoff=viewMonthCutoff();
+  if(!cutoff)return 0;
+  return currentMonthBookings().filter(b=>b.type==='income'&&String(b.date||'')<=cutoff)
+    .reduce((s,b)=>s+b.amountCents,0);
+}
+function currentExpenses(){
+  const cutoff=viewMonthCutoff();
+  if(!cutoff)return 0;
+  return currentMonthBookings().filter(b=>String(b.date||'')<=cutoff)
+    .reduce((s,b)=>b.type==='expense'?s+b.amountCents:b.type==='refund'?s-b.amountCents:s,0);
+}
+function setViewMonth(periodKey){
+  if(!/^\d{4}-\d{2}$/.test(String(periodKey||'')))return;
+  const [y,m]=periodKey.split('-').map(Number);
+  planningYear=y;planningMonth=m;planningKey=periodKey;
+  ensureObligationInstances();
+  update();
+}
+function changeViewMonth(offset){
+  setViewMonth(monthOffsetKey(planningKey,offset));
+}
+
+function netBookingsForPeriod(periodKey,throughDate=null){
+  return bookings.filter(b=>bookingPeriod(b)===periodKey)
+    .filter(b=>!throughDate||String(b.date||'')<=throughDate)
+    .reduce((s,b)=>(b.type==='income'||b.type==='refund')?s+b.amountCents:b.type==='expense'?s-b.amountCents:s,0);
+}
+function previousPeriodKey(periodKey){
+  const [y,m]=periodKey.split('-').map(Number);
+  const d=new Date(y,m-2,1);
+  return monthKey(d.getFullYear(),d.getMonth()+1);
+}
+function nextPeriodKey(periodKey){
+  const [y,m]=periodKey.split('-').map(Number);
+  const d=new Date(y,m,1);
+  return monthKey(d.getFullYear(),d.getMonth()+1);
+}
+function openingBalanceFor(periodKey=planningKey){
+  const anchorKey=String(balanceAnchor.month||planningKey), anchorAmount=balanceAnchor.amountCents;
+  const [ay,am]=anchorKey.split('-').map(Number), [ty,tm]=periodKey.split('-').map(Number);
+  const aIdx=monthIndex(ay,am),tIdx=monthIndex(ty,tm);
+  if(tIdx<aIdx||!Number.isSafeInteger(anchorAmount)) return NaN;
+  let balance=anchorAmount,key=anchorKey;
+  while(key!==periodKey){balance+=netBookingsForPeriod(key);key=nextPeriodKey(key)}
+  return balance;
+}
+function latestReconciliationFor(cutoff){
+  if(!cutoff)return null;
+  return reconciliations.filter(r=>r.date<=cutoff).sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt-a.createdAt)[0]||null;
+}
+function netBookingsAfterReconciliation(r,cutoff){
+  return bookings.filter(b=>String(b.date||'')<=cutoff)
+    .filter(b=>String(b.date||'')>r.date || (String(b.date||'')===r.date && Number(b.createdAt||0)>Number(r.bookingCutoffCreatedAt||0)))
+    .reduce((sum,b)=>(b.type==='income'||b.type==='refund')?sum+b.amountCents:b.type==='expense'?sum-b.amountCents:sum,0);
+}
+function currentAccountBalance(){
+  // Zukunftsplanung verwendet die heutige Kontowahrheit, niemals erfundene Zukunftsbuchungen.
+  const cutoff=viewMonthCutoff()||isoToday();
+  const recon=latestReconciliationFor(cutoff);
+  if(recon)return recon.amountCents+netBookingsAfterReconciliation(recon,cutoff);
+  const actualKey=cutoff.slice(0,7);
+  const opening=openingBalanceFor(actualKey);
+  if(!Number.isFinite(opening)) return NaN;
+  return opening+netBookingsForPeriod(actualKey,cutoff);
+}
+function safePlanningBalance(){
+  const balance=currentAccountBalance();
+  if(!Number.isFinite(balance)) return NaN;
+  return balance-currentMonthCommitments()-futureReserve();
+}
+
+
+function dueDateInMonth(r,y,m){
+  const a=parseIsoDate(r.due);
+  const target=monthIndex(y,m), anchor=monthIndex(a.y,a.m);
+  if(target<anchor) return null;
+  const diff=target-anchor;
+  if(diff%r.freq!==0) return null;
+  const maxDay=new Date(y,m,0).getDate();
+  const dueDate=`${y}-${pad2(m)}-${pad2(Math.min(a.d,maxDay))}`;
+  if(r.activeUntil&&dueDate>r.activeUntil)return null;
+  return dueDate;
+}
+function nextDueDate(r,fromY=planningYear,fromM=planningMonth){
+  const a=parseIsoDate(r.due);
+  const from=monthIndex(fromY,fromM), anchor=monthIndex(a.y,a.m);
+  let idx;
+  if(from<=anchor) idx=anchor;
+  else{
+    const diff=from-anchor, rem=diff%r.freq;
+    idx=rem===0?from:from+(r.freq-rem);
+  }
+  const y=Math.floor(idx/12), m=(idx%12)+1;
+  const maxDay=new Date(y,m,0).getDate();
+  const dueDate=`${y}-${pad2(m)}-${pad2(Math.min(a.d,maxDay))}`;
+  return r.activeUntil&&dueDate>r.activeUntil ? null : dueDate;
+}
+function instanceIdFor(recurringId,dueDate){return `oi_${recurringId}_${dueDate}`}
+function monthOffsetKey(baseKey,offset){
+  const [y,m]=baseKey.split('-').map(Number),d=new Date(y,m-1+offset,1);
+  return monthKey(d.getFullYear(),d.getMonth()+1);
+}
+function ensureObligationInstances(){
+  const endKey=monthOffsetKey(planningKey,18);
+  recurring.forEach(r=>{
+    let key=(r.effectiveFrom&&r.effectiveFrom>planningKey)?r.effectiveFrom:planningKey;
+    let protectedAssigned=obligationInstances.some(o=>o.recurringId===r.id&&o.protectedCents>0);
+    while(key<=endKey){
+      const [y,m]=key.split('-').map(Number),dueDate=dueDateInMonth(r,y,m);
+      if(dueDate){
+        const id=instanceIdFor(r.id,dueDate);
+        if(!obligationInstances.some(o=>o.id===id)){
+          const protectedCents=!protectedAssigned ? Math.min(r.savedCents,r.amountCents) : 0;
+          obligationInstances.push(normalizeObligationInstance({
+            id,recurringId:r.id,name:r.name,dueDate,amountCents:r.amountCents,protectedCents,
+            category:r.category,payment:r.payment,createdAt:Date.now()
+          }));
+          if(protectedCents>0) protectedAssigned=true;
+        }
+      }
+      key=nextPeriodKey(key);
+    }
+  });
+  // Migration of old recurringId + period links.
+  bookings.forEach(b=>{
+    if(b.obligationInstanceId||!b.recurringId||!b.obligationPeriod)return;
+    const r=recurring.find(x=>x.id===b.recurringId); if(!r)return;
+    const [y,m]=b.obligationPeriod.split('-').map(Number),dueDate=dueDateInMonth(r,y,m); if(!dueDate)return;
+    const id=instanceIdFor(r.id,dueDate);
+    if(!obligationInstances.some(o=>o.id===id)){
+      obligationInstances.push(normalizeObligationInstance({
+        id,recurringId:r.id,name:r.name,dueDate,amountCents:r.amountCents,
+        protectedCents:0,category:r.category,payment:r.payment,createdAt:Date.now()
+      }));
+    }
+    b.obligationInstanceId=id;
+  });
+}
+function actualCutoffForView(){
+  const cutoff=viewMonthCutoff();
+  return cutoff||isoToday();
+}
+function paidForInstance(instance,cutoff=actualCutoffForView()){
+  return bookings.filter(b=>b.type==='expense'&&String(b.date||'')<=cutoff&&b.obligationInstanceId===instance.id)
+    .reduce((s,b)=>s+b.amountCents,0);
+}
+function openForInstance(instance,cutoff=actualCutoffForView()){return Math.max(0,instance.amountCents-paidForInstance(instance,cutoff))}
+function uncoveredForInstance(instance,cutoff=actualCutoffForView()){
+  const open=openForInstance(instance,cutoff);
+  return Math.max(0,open-Math.min(instance.protectedCents,open));
+}
+function instancesDueThroughPlanningMonth(){
+  const end=`${planningKey}-${pad2(new Date(planningYear,planningMonth,0).getDate())}`;
+  return obligationInstances.filter(o=>o.dueDate<=end);
+}
+function openDueCommitments(){return instancesDueThroughPlanningMonth().reduce((s,o)=>s+uncoveredForInstance(o),0)}
+function nextOpenFutureInstanceFor(r){
+  const end=`${planningKey}-${pad2(new Date(planningYear,planningMonth,0).getDate())}`;
+  return obligationInstances.filter(o=>o.recurringId===r.id&&o.dueDate>end&&uncoveredForInstance(o)>0)
+    .sort((a,b)=>a.dueDate.localeCompare(b.dueDate))[0]||null;
+}
+function isDueInPlanningMonth(r){return !!dueDateInMonth(r,planningYear,planningMonth)}
+function paidForObligation(r,periodKey=planningKey){
+  const [y,m]=periodKey.split('-').map(Number),dueDate=dueDateInMonth(r,y,m);if(!dueDate)return 0;
+  const i=obligationInstances.find(o=>o.id===instanceIdFor(r.id,dueDate));return i?paidForInstance(i):0;
+}
+function openCurrentCommitment(r){
+  const dueDate=dueDateInMonth(r,planningYear,planningMonth);if(!dueDate)return 0;
+  const i=obligationInstances.find(o=>o.id===instanceIdFor(r.id,dueDate));return i?uncoveredForInstance(i):r.amountCents;
+}
+function currentMonthCommitments(){return openDueCommitments()}
+function monthlyReserveFor(r){
+  if(r.freq===1)return 0;
+  const i=nextOpenFutureInstanceFor(r);if(!i)return 0;
+  const {y,m}=parseIsoDate(i.dueDate),monthsAway=monthIndex(y,m)-monthIndex(planningYear,planningMonth);
+  return Math.ceil(uncoveredForInstance(i)/Math.max(1,monthsAway));
+}
+function futureReserve(){return recurring.filter(r=>r.freq>1&&!isDueInPlanningMonth(r)).reduce((s,r)=>s+monthlyReserveFor(r),0)}
+
+
+
+function openCommitmentDetailRows(){
+  return instancesDueThroughPlanningMonth()
+    .map(o=>({name:o.name||'Verpflichtung',dueDate:o.dueDate,amount:uncoveredForInstance(o)}))
+    .filter(x=>x.amount>0)
+    .sort((a,b)=>a.dueDate.localeCompare(b.dueDate)||a.name.localeCompare(b.name,'de'));
+}
+function reserveDetailRows(){
+  return recurring.filter(r=>r.freq>1&&!isDueInPlanningMonth(r)).map(r=>{
+    const i=nextOpenFutureInstanceFor(r);
+    if(!i)return null;
+    const amount=monthlyReserveFor(r);
+    if(amount<=0)return null;
+    return {name:r.name||'Verpflichtung',dueDate:i.dueDate,amount};
+  }).filter(Boolean).sort((a,b)=>a.dueDate.localeCompare(b.dueDate)||a.name.localeCompare(b.name,'de'));
+}
+function detailDateLabel(iso){
+  const p=parseIsoDate(iso);
+  return `${pad2(p.d)}.${pad2(p.m)}.${p.y}`;
+}
+function openPlanningDetails(kind){
+  const isOpen=kind==='open';
+  const rows=isOpen?openCommitmentDetailRows():reserveDetailRows();
+  document.getElementById('planningDetailsEyebrow').textContent=isOpen?'OFFENE VERPFLICHTUNGEN':'SPARFINO-RESERVE';
+  document.getElementById('planningDetailsTitle').textContent=isOpen?'Was ist noch offen?':'Wofür wird Geld reserviert?';
+  document.getElementById('planningDetailsIntro').textContent=isOpen
+    ?`Diese Positionen sind im ${new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(new Date(planningYear,planningMonth-1,1))} noch nicht durch eine eindeutig zugeordnete Zahlung gedeckt.`
+    :'Diese späteren Verpflichtungen bilden genau die aktuell angezeigte SparFino-Reserve.';
+  const list=document.getElementById('planningDetailsList');
+  if(!rows.length){
+    list.innerHTML='<div class="row"><div><strong>Keine Positionen</strong><div class="muted">Für diese Kennzahl gibt es aktuell nichts aufzuschlüsseln.</div></div></div>';
+  }else{
+    list.innerHTML=rows.map(x=>`<div class="row"><div><strong>${escapeHtml(x.name)}</strong><div class="muted">${isOpen?'Fällig':'Nächste Fälligkeit'}: ${detailDateLabel(x.dueDate)}</div></div><strong>${euroCents(x.amount)}</strong></div>`).join('');
+  }
+  document.getElementById('planningDetailsTotal').textContent=euroCents(rows.reduce((s,x)=>s+x.amount,0));
+  document.getElementById('planningDetailsModal').classList.remove('hidden');
+}
+function closePlanningDetails(){document.getElementById('planningDetailsModal').classList.add('hidden')}
+
+function openReconcileModal(){
+  const date=isoToday();
+  const latest=[...reconciliations].filter(r=>r.date<=date).sort((a,b)=>b.date.localeCompare(a.date)||Number(b.createdAt||0)-Number(a.createdAt||0))[0]||null;
+  document.getElementById('reconcileDate').value=latest?latest.date:date;
+  document.getElementById('reconcileAmount').value=latest?formatEuroInput(latest.amountCents):'';
+  document.getElementById('reconcileError').style.display='none';
+  const hist=document.getElementById('reconcileHistory');
+  if(hist){
+    const rows=[...reconciliations].sort((a,b)=>b.date.localeCompare(a.date)||Number(b.createdAt||0)-Number(a.createdAt||0)).slice(0,5);
+    hist.innerHTML=rows.length?rows.map(r=>`<div>${deDate(r.date)} · <strong>${euroCents(r.amountCents)}</strong></div>`).join(''):'Noch kein Kontoabgleich gespeichert.';
+  }
+  document.getElementById('reconcileModal').classList.remove('hidden');
+}
+function closeReconcileModal(){document.getElementById('reconcileModal').classList.add('hidden')}
+function saveReconciliation(){
+  const date=String(document.getElementById('reconcileDate').value||'');
+  const amountCents=parseEuroToCents(document.getElementById('reconcileAmount').value);
+  const err=document.getElementById('reconcileError');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||date>isoToday()){err.textContent='Bitte ein heutiges oder vergangenes Datum wählen.';err.style.display='block';return}
+  if(!Number.isSafeInteger(amountCents)){err.textContent='Kontostand nicht erkannt. Beispiel: 600,00';err.style.display='block';return}
+  const same=reconciliations.find(r=>r.date===date&&r.amountCents===amountCents);
+  if(same){closeReconcileModal();showSaveToast('Dieser Kontoabgleich ist bereits gespeichert.',false);return}
+  const maxCreated=bookings.filter(b=>String(b.date||'')<=date).reduce((m,b)=>Math.max(m,Number(b.createdAt||0)),0);
+  const old=reconciliations.slice();
+  const previousSameDate=reconciliations.find(r=>r.date===date);
+  reconciliations=reconciliations.filter(r=>r.date!==date);
+  reconciliations.push(normalizeReconciliation({id:previousSameDate?.id||uid('recon'),date,amountCents,createdAt:Date.now(),bookingCutoffCreatedAt:maxCreated}));
+  if(!safeSave()){reconciliations=old;err.textContent='Der Abgleich konnte nicht gespeichert werden.';err.style.display='block';return}
+  closeReconcileModal();update();showSaveToast('Kontostand sicher abgeglichen.',false);
+}
+
+function openOpeningDetails(){
+  const opening=openingBalanceFor(planningKey);
+  const currentLabel=new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(new Date(planningYear,planningMonth-1,1));
+  const prevDate=new Date(planningYear,planningMonth-2,1);
+  const prevLabel=new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(prevDate);
+  document.getElementById('openingDetailsTitle').textContent=`Monatsübertrag ${currentLabel}`;
+  document.getElementById('openingDetailsText').textContent=`Der Startwert für ${currentLabel} entsteht automatisch aus dem vorherigen Monat.`;
+  document.getElementById('openingDetailsSource').textContent=`Endbestand aus ${prevLabel}`;
+  document.getElementById('openingDetailsAmount').textContent=Number.isSafeInteger(opening)?euroCents(opening):'–';
+  document.getElementById('openingDetailsModal').classList.remove('hidden');
+}
+function closeOpeningDetails(){document.getElementById('openingDetailsModal').classList.add('hidden')}
+
+function openBalanceModal(){
+  const modal=document.getElementById('balanceModal');
+  document.getElementById('balanceAnchorMonth').value=String(balanceAnchor.month||planningKey);
+  document.getElementById('balanceAnchorAmount').value=(balanceAnchor.amountCents/100).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('balanceError').style.display='none';
+  modal.classList.remove('hidden');
+}
+function closeBalanceModal(){document.getElementById('balanceModal').classList.add('hidden')}
+function previewBalanceInput(){
+  const input=document.getElementById('balanceAnchorAmount');
+  const preview=document.getElementById('balanceParsedPreview');
+  if(!input||!preview)return;
+  const cents=parseEuroToCents(input.value);
+  preview.textContent=Number.isSafeInteger(cents)?`SparFino versteht: ${euroCents(cents)}`:'Betrag noch nicht erkannt.';
+}
+function saveBalanceAnchor(){
+  const month=String(document.getElementById('balanceAnchorMonth').value||'');
+  const amountCents=parseEuroToCents(document.getElementById('balanceAnchorAmount').value);
+  const err=document.getElementById('balanceError');
+  if(!/^\d{4}-\d{2}$/.test(month)){err.textContent='Bitte einen gültigen Startmonat wählen.';err.style.display='block';return}
+  if(!Number.isSafeInteger(amountCents)){err.textContent='Betrag nicht erkannt. Eingabe: „'+document.getElementById('balanceAnchorAmount').value+'“. Beispiel: minus 1.204,57 Euro';err.style.display='block';return}
+  if(month>monthKey(now.getFullYear(),now.getMonth()+1)){err.textContent='Für den Test bitte einen heutigen oder vergangenen Startmonat wählen.';err.style.display='block';return}
+  const old={...balanceAnchor};
+  balanceAnchor={month,amountCents};
+  if(!safeSave()){balanceAnchor=old;err.textContent='Der Startbestand konnte nicht lokal gespeichert werden.';err.style.display='block';return}
+  ensureObligationInstances();
+  closeBalanceModal();
+  update();
+}
+
+function analysisPeriodTotals(key){
+  return bookings.filter(b=>bookingPeriod(b)===key).reduce((a,b)=>{
+    if(b.type==='income')a.income+=b.amountCents;
+    else if(b.type==='expense')a.expense+=b.amountCents;
+    else if(b.type==='refund')a.expense-=b.amountCents;
+    return a;
+  },{income:0,expense:0});
+}
+function analysisKeysForView(){
+  return [-2,-1,0].map(offset=>monthOffsetKey(planningKey,offset));
+}
+function analysisMonthLabel(key){
+  const [y,m]=key.split('-').map(Number);
+  return new Intl.DateTimeFormat('de-DE',{month:'short'}).format(new Date(y,m-1,1)).replace('.','');
+}
+function analysisMonthLong(key){
+  const [y,m]=key.split('-').map(Number);
+  return new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(new Date(y,m-1,1));
+}
+function analysisCategoryTotals(key){
+  const cats={};
+  bookings.filter(b=>bookingPeriod(b)===key&&(b.type==='expense'||b.type==='refund')).forEach(b=>{
+    const sign=b.type==='refund'?-1:1;
+    cats[b.category]=(cats[b.category]||0)+sign*b.amountCents;
+  });
+  return Object.fromEntries(Object.entries(cats).filter(([,v])=>v>0));
+}
+function renderAnalysis(){
+  const keys=analysisKeysForView(), bars=document.getElementById('analysisBars');
+  if(!bars)return;
+  const totals=keys.map(analysisPeriodTotals),max=Math.max(1,...totals.flatMap(x=>[Math.max(0,x.income),Math.max(0,x.expense)]));
+  bars.innerHTML='';
+  totals.forEach(t=>{
+    const g=document.createElement('div');g.className='analysis-month';
+    const i=document.createElement('div');i.className='analysis-bar';i.style.height=`${Math.max(2,Math.max(0,t.income)/max*100)}%`;i.title=`Einnahmen ${euroCents(t.income)}`;
+    const e=document.createElement('div');e.className='analysis-bar expense';e.style.height=`${Math.max(2,Math.max(0,t.expense)/max*100)}%`;e.title=`Netto-Ausgaben ${euroCents(Math.max(0,t.expense))}`;
+    g.append(i,e);bars.appendChild(g);
+  });
+  document.getElementById('analysisLabels').innerHTML=keys.map(k=>`<div>${escapeHtml(analysisMonthLabel(k))}</div>`).join('');
+  document.getElementById('analysisRangeTitle').textContent=`Einnahmen und Netto-Ausgaben · ${analysisMonthLong(keys[0])} bis ${analysisMonthLong(keys[2])}`;
+  document.getElementById('analysisMonthSummary').textContent=totals.map((t,n)=>`${analysisMonthLabel(keys[n])}: ${euroCents(t.income)} rein · ${euroCents(Math.max(0,t.expense))} netto raus`).join('  |  ');
+
+  const p=document.getElementById('potentialList');
+  const items=[
+    ['Restaurant','Budget prüfen','Tatsächliche Restaurantbuchungen ansehen; nicht automatisch streichen.'],
+    ['Sonstiges','genauer zuordnen','Eine unscharfe Kategorie ist keine belastbare Sparaussage.'],
+    ['Bargeld','Verwendungszweck erfassen','Abhebungen zeigen den späteren Verwendungszweck nicht.'],
+    ['Telefon / Apple / Software','Verträge & Abos prüfen','Wiederkehrende und zusätzliche digitale Kosten getrennt kontrollieren.'],
+    ['Versicherungen','Leistung & Überschneidung prüfen','Deckung und Vertragskosten prüfen, nicht pauschal kündigen.']
+  ];
+  p.innerHTML=items.map(x=>`<div class="potential-row"><div><b>${escapeHtml(x[0])}</b><div class="potential-note">${escapeHtml(x[2])}</div></div><strong>${escapeHtml(x[1])}</strong></div>`).join('');
+
+  const cats=analysisCategoryTotals(planningKey);
+  const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]),catMax=Math.max(1,...sorted.map(x=>x[1]));
+  document.getElementById('analysisCategoryTitle').textContent=`${monthName(planningMonth)} ${planningYear} · Netto-Ausgaben nach Kategorie (Erstattungen abgezogen)`;
+  document.getElementById('analysisCategories').innerHTML=sorted.length?sorted.slice(0,12).map(([name,val])=>`<div class="cat-row"><span>${escapeHtml(name)}</span><div class="cat-track"><div class="cat-fill" style="width:${Math.max(2,val/catMax*100)}%"></div></div><strong>${euroCents(val)}</strong></div>`).join(''):'<div class="analysis-sub">In diesem Monat sind noch keine Netto-Ausgaben gebucht.</div>';
+}
+function update(){
+  const monthTitle=new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(new Date(planningYear,planningMonth-1,1));
+  const viewTitle=document.getElementById('viewMonthTitle');if(viewTitle)viewTitle.textContent=monthTitle;
+  const income=currentIncome(),spent=currentExpenses();
+  const opening=openingBalanceFor(planningKey),accountBalance=currentAccountBalance();
+  const commitments=currentMonthCommitments(),reserve=futureReserve();
+  const planningBalance=Number.isSafeInteger(accountBalance)?accountBalance-commitments-reserve:NaN;
+  const freeAvailable=Number.isSafeInteger(planningBalance)?Math.max(0,planningBalance):0;
+  const planningGap=Number.isSafeInteger(planningBalance)?Math.max(0,-planningBalance):0;
+
+  const availableEl=document.getElementById('available'),heroLabel=document.getElementById('heroLabel');
+  const heroSub=document.getElementById('heroSub'),heroCard=availableEl.closest('.hero-card');
+  if(!Number.isSafeInteger(opening)||!Number.isSafeInteger(accountBalance)){
+    heroLabel.innerHTML=`Startbestand für <span id="heroMonth">${monthTitle}</span> fehlt`;
+    availableEl.textContent='–'; heroSub.textContent='Lege einen gültigen Startbestand fest, damit SparFino den Monatsübertrag berechnen kann.'; heroCard.classList.add('deficit');
+  }else if(planningGap>0){
+    heroLabel.innerHTML=`Planungslücke im <span id="heroMonth">${monthTitle}</span>`;
+    availableEl.textContent=euroCents(planningGap);
+    heroSub.textContent='Für eine sichere Planung fehlen aktuell '+euroCents(planningGap)+'. Dein Kontostand laut SparFino beträgt '+euroCents(accountBalance)+'.';heroCard.classList.add('deficit');
+  }else if(freeAvailable===0){
+    heroLabel.innerHTML=`Aktuell nichts frei verfügbar im <span id="heroMonth">${monthTitle}</span>`;
+    availableEl.textContent=euroCents(0);heroSub.textContent='Dein vorhandenes Geld ist durch offene Verpflichtungen und Reserven vollständig verplant.';heroCard.classList.remove('deficit');
+  }else{
+    heroLabel.innerHTML=`Frei verfügbar im <span id="heroMonth">${monthTitle}</span>`;
+    availableEl.textContent=euroCents(freeAvailable);heroSub.textContent='Vom Kontostand laut SparFino sind offene Verpflichtungen und die Reserve für spätere Rechnungen bereits abgezogen.';heroCard.classList.remove('deficit');
+  }
+
+  document.getElementById('openingMonthLabel').textContent=monthTitle;
+  document.getElementById('openingBalanceHome').textContent=Number.isSafeInteger(opening)?euroCents(opening):'–';
+  document.getElementById('accountBalanceHome').textContent=Number.isSafeInteger(accountBalance)?euroCents(accountBalance):'–';
+  document.getElementById('income').textContent='+'+euroCents(income);
+  document.getElementById('spent').textContent='−'+euroCents(spent);
+  document.getElementById('openObligationsHome').textContent='−'+euroCents(commitments);
+  document.getElementById('reserveHome').textContent='−'+euroCents(reserve);
+  document.getElementById('calcOpening').textContent=Number.isSafeInteger(opening)?euroCents(opening):'–';
+  document.getElementById('calcIncome').textContent='+'+euroCents(income);
+  document.getElementById('calcSpent').textContent='−'+euroCents(spent);
+  document.getElementById('calcAccountBalance').textContent=Number.isSafeInteger(accountBalance)?euroCents(accountBalance):'–';
+  document.getElementById('calcCommitments').textContent='−'+euroCents(commitments);
+  document.getElementById('calcReserve').textContent='−'+euroCents(reserve);
+
+  const calcLabel=document.getElementById('calcResultLabel');
+  if(!Number.isSafeInteger(planningBalance)){calcLabel.textContent='Berechnung nicht möglich';document.getElementById('calcAvailable').textContent='–'}
+  else if(planningGap>0){calcLabel.textContent='Planungslücke';document.getElementById('calcAvailable').textContent=euroCents(planningGap)}
+  else{calcLabel.textContent='Frei verfügbar';document.getElementById('calcAvailable').textContent=euroCents(freeAvailable)}
+
+  document.getElementById('statusText').textContent=!Number.isSafeInteger(planningBalance)?'Für die sichere Berechnung fehlt ein gültiger Startbestand.'
+    :planningGap>0?`Deine sichere Planung ist aktuell um ${euroCents(planningGap)} unterdeckt.`
+    :freeAvailable>50000?'Deine sichere Planung ist gedeckt. Nach Verpflichtungen und Reserven bleibt noch Spielraum.'
+    :freeAvailable>0?'Deine sichere Planung ist gedeckt, aber dein frei verfügbarer Spielraum wird knapp.'
+    :'Deine sichere Planung ist genau ausgeschöpft.';
+  renderAnalysis();
+  renderBookings();renderRecurring();renderForecast();populateRecurringLink();
+}
+
+function freqText(f){return ({1:'monatlich',2:'alle 2 Monate',3:'vierteljährlich',6:'halbjährlich',12:'jährlich'})[f]||''}
+
+function renderBookings(){
+  const box=document.getElementById('bookingList');box.innerHTML='';
+  const sorted=bookings.slice().sort((a,b)=>b.date.localeCompare(a.date)||Number(b.createdAt||0)-Number(a.createdAt||0));
+  if(!sorted.length){box.innerHTML='<div class="empty-bookings">Noch keine Buchungen vorhanden.</div>';return}
+
+  const head=document.createElement('div');head.className='booking-head';
+  head.innerHTML='<div>Datum</div><div>Art</div><div>Kategorie</div><div>Beschreibung</div><div style="text-align:right">Betrag</div><div style="text-align:right">Aktion</div>';
+  box.appendChild(head);
+
+  sorted.forEach(b=>{
+    const instance=b.obligationInstanceId?obligationInstances.find(o=>o.id===b.obligationInstanceId):null;
+    const linkedName=instance?.name||(b.recurringId?recurring.find(r=>r.id===b.recurringId)?.name:null);
+    const description=[b.desc,linkedName?`Verpflichtung: ${linkedName} · fällig ${instance?deDate(instance.dueDate):b.obligationPeriod||''}`:''].filter(Boolean).join(' · ')||'—';
+    const row=document.createElement('div');row.className='booking-entry';
+
+    const values=[
+      ['booking-date',dateLabel(b.date)],
+      ['booking-type',b.type==='income'?'Einnahme':b.type==='refund'?'Erstattung':'Ausgabe'],
+      ['booking-category',b.category],
+      ['booking-desc',description]
+    ];
+    values.forEach(([cls,text])=>{const d=document.createElement('div');d.className=cls;d.textContent=text;d.title=text;row.appendChild(d)});
+    const amount=document.createElement('div');amount.className=`booking-value ${b.type==='income'||b.type==='refund'?'income':'expense'}`;
+    amount.textContent=`${b.type==='income'||b.type==='refund'?'+':'−'}${euroCents(b.amountCents)}`;row.appendChild(amount);
+
+    const actions=document.createElement('div');actions.className='booking-actions';
+    const edit=document.createElement('button');edit.type='button';edit.className='booking-mini';edit.textContent='Bearbeiten';edit.onclick=()=>openEditBooking(b.id);
+    const del=document.createElement('button');del.type='button';del.className='booking-mini';del.textContent='Löschen';del.onclick=()=>deleteBooking(b.id);
+    actions.append(edit,del);row.appendChild(actions);box.appendChild(row);
+  });
+}
+
+function renderForecast(){
+  const host=document.getElementById('forecastContent');if(!host)return;
+  const future=recurring.filter(r=>r.freq>1).map(r=>{const i=nextOpenFutureInstanceFor(r);return i?{r,i,reserve:monthlyReserveFor(r)}:null})
+    .filter(Boolean).sort((a,b)=>a.i.dueDate.localeCompare(b.i.dueDate));
+  if(!future.length){host.innerHTML='<div><strong>Keine offene größere spätere Verpflichtung</strong><div class="muted">Aktuell ist keine zusätzliche Rücklage nötig.</div></div><div class="amount">0,00 €</div>';return}
+  const item=future[0];
+  host.innerHTML=`<div><strong>${item.i.name} · ${euroCents(item.i.amountCents)}</strong><div class="muted">Fällig ${deDate(item.i.dueDate)} · noch offen ${euroCents(openForInstance(item.i))} · bereits geschützt ${euroCents(item.i.protectedCents)} · Monatsrücklage ${euroCents(item.reserve)}.</div></div><div class="amount">−${euroCents(item.reserve)}</div>`;
+}
+
+function renderRecurring(){
+  const box=document.getElementById('recurringList'); if(!box) return;
+  box.innerHTML='';
+  recurring.forEach((r,i)=>{
+    const dueThis=dueDateInMonth(r,planningYear,planningMonth), ended=!!r.activeUntil;
+    const paid=paidForObligation(r,planningKey), open=openCurrentCommitment(r), next=nextDueDate(r), reserve=monthlyReserveFor(r);
+    let logic;
+    if(dueThis){
+      logic=paid>=r.amountCents?'bezahlt · eindeutig zugeordnet':paid>0?`teilweise bezahlt · noch offen ${euroCents(open)}`:`diesen Monat fällig · noch offen ${euroCents(open)}`;
+    }else if(ended) logic=`beendet zum ${deDate(r.activeUntil)}`;
+    else if(r.freq>1) logic=`nächste Fälligkeit ${deDate(next)} · Rücklage ${euroCents(reserve)}`;
+    else logic=`nächste Fälligkeit ${deDate(next)}`;
+
+    if(ended)logic=`beendet zum ${deDate(r.activeUntil)} · historische Fälligkeiten bleiben erhalten`;
+    const row=document.createElement('div'); row.className='row';
+    row.innerHTML=`<div><strong>${r.name}</strong><div class="freq">${freqText(r.freq)} · ${r.payment} · ${logic}</div>${r.savedCents>0?`<div class="freq">Bereits geschützt: ${euroCents(r.savedCents)}</div>`:''}</div>
+      <div><span class="amount">${euroCents(r.amountCents)}</span>${ended?'':`<button type="button" class="secondary" style="margin-left:10px;padding:6px 9px" onclick="openRecurringChange('${r.id}')">Ändern</button><button type="button" class="secondary" style="margin-left:6px;padding:6px 9px" onclick="removeRecurring(${i})">Beenden</button>`}</div>`;
+    box.appendChild(row);
+  });
+}
+
+function addRecurring(){
+  const name=document.getElementById('recName').value.trim(),amountCents=parseEuroToCents(document.getElementById('recAmount').value);
+  const freq=parseInt(document.getElementById('recFreq').value,10),due=document.getElementById('recDue').value;
+  const rawSaved=document.getElementById('recSaved').value,savedCents=String(rawSaved||'').trim()===''?0:parseEuroToCents(rawSaved),payment=document.getElementById('recPayment').value;
+  if(!name||!Number.isSafeInteger(amountCents)||amountCents<=0||!due){alert('Bitte Bezeichnung, gültigen Betrag und Fälligkeit eingeben.');return}
+  if(!Number.isSafeInteger(savedCents)||savedCents<0||savedCents>amountCents){alert('Der bereits geschützte Betrag muss zwischen 0 und dem Gesamtbetrag liegen.');return}
+  const r={id:uid('rec'),name,amountCents,freq,due,payment,savedCents,category:'Sonstiges',effectiveFrom:planningKey};
+  recurring.push(r);ensureObligationInstances();
+  if(!safeSave()){recurring.pop();obligationInstances=obligationInstances.filter(o=>o.recurringId!==r.id);alert('Die Verpflichtung konnte nicht sicher gespeichert werden. Es wurde nichts übernommen.');return}
+  document.getElementById('recName').value='';document.getElementById('recAmount').value='';document.getElementById('recDue').value='';document.getElementById('recSaved').value='0';update();
+}
+function openRecurringChange(id){
+  const r=recurring.find(x=>x.id===id);if(!r||r.activeUntil)return;
+  document.getElementById('changeRecurringId').value=r.id;
+  document.getElementById('changeRecurringName').value=r.name;
+  document.getElementById('changeRecurringAmount').value=formatEuroInput(r.amountCents);
+  document.getElementById('changeRecurringFrom').value=isoToday();
+  const e=document.getElementById('changeRecurringError');e.style.display='none';e.textContent='';
+  document.getElementById('recurringChangeModal').classList.remove('hidden');
+}
+function closeRecurringChange(){document.getElementById('recurringChangeModal').classList.add('hidden')}
+function firstRecurringDueOnOrAfter(r,from){
+  const target=parseIsoDate(from), anchor=parseIsoDate(r.due);
+  let idx=Math.max(monthIndex(target.y,target.m),monthIndex(anchor.y,anchor.m));
+  const anchorIdx=monthIndex(anchor.y,anchor.m);
+  const rem=(idx-anchorIdx)%r.freq;
+  if(rem!==0) idx+=r.freq-rem;
+  for(let guard=0;guard<3;guard++,idx+=r.freq){
+    const y=Math.floor(idx/12),m=(idx%12)+1,maxDay=new Date(y,m,0).getDate();
+    const due=`${y}-${pad2(m)}-${pad2(Math.min(anchor.d,maxDay))}`;
+    if(due>=from)return due;
+  }
+  return null;
+}
+function dayBeforeIso(iso){
+  const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()-1);
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+}
+function saveRecurringChange(){
+  const id=document.getElementById('changeRecurringId').value,r=recurring.find(x=>x.id===id);
+  const amountCents=parseEuroToCents(document.getElementById('changeRecurringAmount').value);
+  const from=document.getElementById('changeRecurringFrom').value,e=document.getElementById('changeRecurringError');
+  const fail=m=>{e.textContent=m;e.style.display='block'};
+  if(!r)return fail('Die Verpflichtung wurde nicht gefunden.');
+  if(!Number.isSafeInteger(amountCents)||amountCents<=0)return fail('Bitte einen gültigen neuen Betrag eingeben.');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(from))return fail('Bitte ein gültiges Datum wählen.');
+  if(r.activeUntil)return fail('Eine bereits beendete Verpflichtung kann nicht geändert werden.');
+  if(from<isoToday())return fail('Für diese Testversion darf eine Änderung nicht rückwirkend beginnen.');
+  // "Gültig ab" ändert den Preis, nicht den vertraglichen Fälligkeitstag.
+  // Es gilt die erste reguläre Fälligkeit am/ nach dem Wirksamkeitsdatum.
+  const firstNewDue=firstRecurringDueOnOrAfter(r,from);
+  if(!firstNewDue)return fail('Für diese Vertragsänderung konnte keine nächste reguläre Fälligkeit bestimmt werden.');
+  const oldUntil=dayBeforeIso(firstNewDue);
+  const oldRecurring=recurring.map(x=>({...x})),oldInstances=obligationInstances.map(x=>({...x}));
+  r.activeUntil=oldUntil;r.endedAt=isoToday();
+  // Nur unbenutzte Instanzen ab der ersten neuen regulären Fälligkeit entfernen.
+  obligationInstances=obligationInstances.filter(o=>!(o.recurringId===r.id&&o.dueDate>=firstNewDue&&!bookings.some(b=>b.obligationInstanceId===o.id)));
+  const nr=normalizeRecurring({
+    id:uid('rec'),name:r.name,amountCents,freq:r.freq,due:firstNewDue,payment:r.payment,
+    savedCents:0,category:r.category,effectiveFrom:firstNewDue.slice(0,7),activeUntil:null,endedAt:null,
+    predecessorId:r.id
+  });
+  recurring.push(nr);ensureObligationInstances();
+  if(!safeSave()){recurring=oldRecurring;obligationInstances=oldInstances;return fail('Die Änderung konnte nicht sicher gespeichert werden. Es wurde nichts verändert.')}
+  closeRecurringChange();update();showSaveToast(`Änderung gespeichert: ${euroCents(amountCents)} · erste neue Fälligkeit ${deDate(firstNewDue)}.`,false);
+}
+
+function removeRecurring(i){
+  const r=recurring[i],today=isoToday();
+  const openExisting=obligationInstances.filter(o=>o.recurringId===r.id&&o.dueDate<=today&&openForInstance(o,today)>0);
+  const linkedFuture=obligationInstances.filter(o=>o.recurringId===r.id&&o.dueDate>today&&bookings.some(b=>b.obligationInstanceId===o.id));
+  const msg=`"${r.name}" als laufende Verpflichtung zum ${deDate(today)} beenden?\n\nBereits entstandene Fälligkeiten bleiben erhalten${openExisting.length?` – davon ${openExisting.length} noch offen`:''}. Der Vertrag bleibt zur Nachvollziehbarkeit gespeichert.\n\nWichtig: Eine spätere Schlussrechnung kann SparFino nicht automatisch kennen. Falls noch eine Schlussrechnung kommt, bitte als eigene Verpflichtung erfassen.`;
+  if(!confirm(msg))return;
+  const old={...r},oldInstances=obligationInstances.slice();
+  r.activeUntil=today;r.endedAt=today;
+  // Nur unbenutzte Zukunftsinstanzen entfernen; verknüpfte Zahlungen dürfen nie verwaisen.
+  obligationInstances=obligationInstances.filter(o=>!(o.recurringId===r.id&&o.dueDate>today&&!linkedFuture.some(x=>x.id===o.id)));
+  if(!safeSave()){
+    recurring[i]=old;obligationInstances=oldInstances;
+    alert('Die Änderung konnte nicht sicher gespeichert werden. Es wurde nichts beendet.');return;
+  }
+  update();showSaveToast('Verpflichtung beendet. Historie bleibt erhalten.',false);
+}
+
+function obligationsDueInPeriod(y,m){return recurring.filter(r=>!!dueDateInMonth(r,y,m))}
+function populateRecurringLink(){
+  const field=document.getElementById('recurringLinkField'),select=document.getElementById('recurringLink'),type=document.getElementById('type');
+  if(!field||!select||!type)return;
+  const expense=type.value==='expense';field.style.display=expense?'block':'none';
+  if(!expense){select.innerHTML='<option value="">Nicht relevant bei Einnahmen</option>';return}
+  select.innerHTML='<option value="">Nein · normale Ausgabe</option>';
+  obligationInstances.filter(o=>openForInstance(o)>0).sort((a,b)=>a.dueDate.localeCompare(b.dueDate)).forEach(o=>{
+    const opt=document.createElement('option');opt.value=o.id;
+    const timing=o.dueDate<isoToday()?'überfällig':o.dueDate===isoToday()?'heute fällig':`fällig ${deDate(o.dueDate)}`;
+    opt.textContent=`${o.name} · ${timing} · offen ${euroCents(openForInstance(o))}`;select.appendChild(opt);
+  });
+}
+
+
+function validateStateStrict(state){
+  const errors=[];
+  if(!state||Number(state.schemaVersion)!==DATA_SCHEMA_VERSION)errors.push('Schema-Version passt nicht.');
+  for(const key of ['bookings','recurring','obligationInstances'])if(!Array.isArray(state?.[key]))errors.push(`${key} fehlt.`);
+  if(!state?.balanceAnchor)errors.push('Startsaldo fehlt.');
+  if(errors.length)return errors;
+  const unique=(arr,label)=>{
+    const ids=arr.map(x=>String(x?.id||''));if(ids.some(x=>!x))errors.push(`${label}: ID fehlt.`);
+    if(new Set(ids).size!==ids.length)errors.push(`${label}: doppelte IDs.`);
+  };
+  unique(state.bookings,'Buchungen');unique(state.recurring,'Verträge');unique(state.obligationInstances,'Verpflichtungen');
+  if(state.bookings.some(b=>!/^\d{4}-\d{2}-\d{2}$/.test(String(b.date||''))||!['income','expense','refund'].includes(b.type)||!Number.isSafeInteger(b.amountCents)||b.amountCents<0))errors.push('Mindestens eine Buchung ist ungültig.');
+  if(state.recurring.some(r=>!Number.isSafeInteger(r.amountCents)||r.amountCents<=0||![1,2,3,6,12].includes(Number(r.freq))||!/^\d{4}-\d{2}-\d{2}$/.test(String(r.due||''))))errors.push('Mindestens ein Vertrag ist ungültig.');
+  if(state.obligationInstances.some(o=>!Number.isSafeInteger(o.amountCents)||o.amountCents<0||!/^\d{4}-\d{2}-\d{2}$/.test(String(o.dueDate||''))))errors.push('Mindestens eine Verpflichtungsinstanz ist ungültig.');
+  const oi=new Set(state.obligationInstances.map(o=>String(o.id)));
+  if(state.bookings.some(b=>b.obligationInstanceId&&!oi.has(String(b.obligationInstanceId))))errors.push('Mindestens eine Buchung verweist auf eine fehlende Verpflichtung.');
+  const rec=new Set(state.recurring.map(r=>String(r.id)));
+  if(state.obligationInstances.some(o=>o.recurringId&&!rec.has(String(o.recurringId))))errors.push('Mindestens eine Verpflichtung verweist auf einen fehlenden Vertrag.');
+  if(!/^\d{4}-\d{2}$/.test(String(state.balanceAnchor?.month||''))||!Number.isSafeInteger(state.balanceAnchor?.amountCents))errors.push('Startsaldo ist ungültig.');
+  if(Array.isArray(state.reconciliations)){
+    unique(state.reconciliations,'Kontoabgleiche');
+    const dates=new Set();
+    for(const r of state.reconciliations){
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(String(r.date||''))||!Number.isSafeInteger(r.amountCents))errors.push('Mindestens ein Kontoabgleich ist ungültig.');
+      if(dates.has(r.date))errors.push('Mehrere Kontoabgleiche am selben Datum.');dates.add(r.date);
+    }
+  }
+  return [...new Set(errors)];
+}
+function downloadStateSnapshot(state,filename){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportTestData(){
+  try{
+    const state={schemaVersion:DATA_SCHEMA_VERSION,savedAt:new Date().toISOString(),bookings,recurring,obligationInstances,balanceAnchor,reconciliations};
+    const filename=`SparFino_Sicherung_${new Date().toISOString().slice(0,10)}.json`;
+    downloadStateSnapshot(state,filename);
+    showSaveToast(`✓ Sicherung erstellt: ${filename} · Im Download-Ordner gespeichert. Die JSON-Datei ist eine Datensicherung und wird nicht direkt geöffnet. Zum Wiederherstellen in SparFino „Sicherung importieren“ wählen.`,false);
+  }catch(e){
+    console.error('Export fehlgeschlagen:',e);
+    showSaveToast('✕ Export fehlgeschlagen. Keine bestätigte Sicherung erstellt. Bitte nichts löschen.',true);
+  }
+}
+
+
+function runBackupSafetyTest(){
+  try{
+    const rt=backupRoundTripCheck();
+    if(!rt.ok){
+      showSaveToast(`✕ Sicherheitstest fehlgeschlagen. Keine Daten löschen oder überschreiben. ${rt.errors.join(' ')}`,true);
+      return;
+    }
+    showSaveToast(`✓ Sicherheitstest bestanden: Export und Wiederherstellung sind verlustfrei. ${rt.counts.bookings} Buchungen, ${rt.counts.recurring} Verträge, ${rt.counts.instances} Verpflichtungen und ${rt.counts.reconciliations} Kontoabgleich(e) geprüft.`,false);
+  }catch(e){
+    console.error('Sicherheitstest fehlgeschlagen:',e);
+    showSaveToast('✕ Sicherheitstest konnte nicht abgeschlossen werden. Keine Daten löschen.',true);
+  }
+}
+
+async function importTestData(event){
+  const input=event?.target;
+  const file=input?.files?.[0];
+  if(!file)return;
+  try{
+    const text=await file.text();
+    const state=JSON.parse(text);
+    if(!state || Number(state.schemaVersion)!==DATA_SCHEMA_VERSION || !Array.isArray(state.bookings) || !Array.isArray(state.recurring) || !Array.isArray(state.obligationInstances) || !state.balanceAnchor){
+      throw new Error('Keine gültige SparFino-Datensicherung.');
+    }
+    // Erst vollständig normalisieren/prüfen; erst danach bestehenden Zustand ersetzen.
+    const cleanState={
+      schemaVersion:DATA_SCHEMA_VERSION,
+      savedAt:new Date().toISOString(),
+      bookings:state.bookings.map(normalizeBooking),
+      recurring:state.recurring.map(normalizeRecurring),
+      obligationInstances:state.obligationInstances.map(normalizeObligationInstance),
+      balanceAnchor:normalizeAnchor(state.balanceAnchor),
+      reconciliations:Array.isArray(state.reconciliations)?state.reconciliations.map(normalizeReconciliation):[]
+    };
+    const validationErrors=validateStateStrict(cleanState);
+    if(validationErrors.length)throw new Error('Importprüfung: '+validationErrors.join(' '));
+    const count=cleanState.bookings.length;
+    if(!confirm(`Importieren? Die aktuell gespeicherten SparFino-Daten werden durch ${count} Buchungen aus der Sicherung ersetzt. Vorher werden automatisch eine lokale Rückfallkopie und eine Sicherungsdatei erzeugt.`))return;
+    const previous=localStorage.getItem(STORAGE_STATE);
+    if(previous){
+      localStorage.setItem(STORAGE_STATE+'_pre_import_backup',previous);
+      try{downloadStateSnapshot(JSON.parse(previous),`SparFino_VOR_IMPORT_${new Date().toISOString().replace(/[:.]/g,'-')}.json`)}catch(e){throw new Error('Die Sicherheitskopie vor dem Import konnte nicht erzeugt werden. Import abgebrochen.')}
+    }
+    localStorage.setItem(STORAGE_STATE,JSON.stringify(cleanState));
+    alert(`Import erfolgreich: ${count} Buchungen wurden übernommen. SparFino wird jetzt neu geladen.`);
+    location.reload();
+  }catch(e){
+    console.error('Import fehlgeschlagen:',e);
+    alert('Import nicht durchgeführt. Die ausgewählte Datei ist keine gültige SparFino-Datensicherung. Bestehende Daten wurden nicht verändert.');
+  }finally{
+    if(input)input.value='';
+  }
+}
+
+
+const STORAGE_ONBOARDING='sparfino_onboarding_v1';
+function onboardingNext(step){
+  [1,2,3].forEach(n=>document.getElementById('onboardingStep'+n)?.classList.toggle('active',n===step));
+}
+function shouldShowOnboarding(){
+  try{
+    return localStorage.getItem(STORAGE_ONBOARDING)!=='done' &&
+      bookings.length===0 && recurring.length===0 && reconciliations.length===0;
+  }catch(e){ return bookings.length===0 && recurring.length===0 && reconciliations.length===0; }
+}
+function openOnboarding(){
+  const d=document.getElementById('onboardingDate'); if(d)d.value=isoToday();
+  onboardingNext(1);
+  document.getElementById('onboardingModal')?.classList.remove('hidden');
+}
+function saveOnboardingBalance(){
+  const err=document.getElementById('onboardingError');
+  const cents=parseEuroToCents(document.getElementById('onboardingBalance')?.value||'');
+  const date=document.getElementById('onboardingDate')?.value||isoToday();
+  if(!Number.isFinite(cents)){
+    if(err){err.textContent='Bitte einen gültigen Kontostand eingeben.';err.style.display='block'} return;
+  }
+  if(err)err.style.display='none';
+  reconciliations=[normalizeReconciliation({id:'recon-'+Date.now(),date,amountCents:cents,createdAt:Date.now(),bookingCutoffCreatedAt:Math.max(0,...bookings.map(b=>Number(b.createdAt)||0))})];
+  safeSave(); update(); onboardingNext(3);
+}
+function finishOnboarding(section){
+  try{localStorage.setItem(STORAGE_ONBOARDING,'done')}catch(e){}
+  document.getElementById('onboardingModal')?.classList.add('hidden');
+  showSection(section||'overview'); update();
+}
+
+function openDashboard(){document.getElementById('welcome').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');showSection('overview');update();if(shouldShowOnboarding())openOnboarding()}
+function backToWelcome(){document.getElementById('dashboard').classList.add('hidden');document.getElementById('welcome').classList.remove('hidden')}
+function showSection(id){
+  ['overview','calculation','bookings','fixed','analysis'].forEach(x=>document.getElementById(x).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  const target=(id==='bookings')?'nav-bookings':(id==='fixed')?'nav-fixed':(id==='analysis')?'nav-analysis':'nav-overview';
+  const btn=document.getElementById(target); if(btn) btn.classList.add('active');
+  const fab=document.querySelector('.add-btn');
+  if(fab) fab.style.display = id==='bookings' ? 'none' : '';
+}
+function resetBookingForm(){
+  document.getElementById('editingBookingId').value='';
+  document.getElementById('bookingModalTitle').textContent='Neue Buchung';
+  document.getElementById('saveBookingBtn').textContent='Buchung speichern';
+  document.getElementById('type').disabled=false;
+  document.getElementById('amount').value='';document.getElementById('description').value='';document.getElementById('customCategory').value='';
+  document.getElementById('bookingDate').value=isoToday();document.getElementById('recurringLink').value='';
+}
+function openModal(){
+  const err=document.getElementById('bookingError');if(err){err.style.display='none';err.textContent=''}
+  resetBookingForm();populateRecurringLink();document.getElementById('modal').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('amount').focus(),50);
+}
+function openEditBooking(id){
+  const b=bookings.find(x=>x.id===id);if(!b)return;
+  const err=document.getElementById('bookingError');if(err){err.style.display='none';err.textContent=''}
+  document.getElementById('editingBookingId').value=b.id;
+  document.getElementById('bookingModalTitle').textContent='Buchung bearbeiten';
+  document.getElementById('saveBookingBtn').textContent='Änderungen speichern';
+  document.getElementById('type').disabled=false;document.getElementById('type').value=b.type==='refund'?'income':b.type;
+  document.getElementById('amount').value=(b.amountCents/100).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const categorySelect=document.getElementById('category');
+  const isPreset=[...categorySelect.options].some(o=>o.value===b.category);
+  categorySelect.value=isPreset?b.category:'Sonstiges';
+  document.getElementById('customCategory').value=isPreset?'':b.category;
+  document.getElementById('bookingDate').value=b.date;document.getElementById('description').value=b.desc||'';
+  populateRecurringLink();document.getElementById('recurringLink').value=b.obligationInstanceId||'';
+  document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function showBookingError(message){const err=document.getElementById('bookingError');err.textContent=message;err.style.display='block'}
+let lastBookingUndo=null;
+function cloneBooking(b){return JSON.parse(JSON.stringify(b))}
+function showSaveToast(message,allowUndo=false){
+  const t=document.getElementById('saveToast'),txt=document.getElementById('saveToastText'),btn=document.getElementById('undoBtn');
+  txt.textContent=message;btn.style.display=allowUndo?'inline-block':'none';t.style.display='block';
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>{t.style.display='none';lastBookingUndo=null},7000);
+}
+function undoLastBookingChange(){
+  if(!lastBookingUndo)return;
+  const snapshot=bookings.map(cloneBooking),action=lastBookingUndo;
+  if(action.kind==='delete') bookings.splice(Math.min(action.index,bookings.length),0,cloneBooking(action.before));
+  else if(action.kind==='edit'){
+    const i=bookings.findIndex(b=>b.id===action.before.id);if(i>=0)bookings[i]=cloneBooking(action.before);
+  }else if(action.kind==='create'){
+    bookings=bookings.filter(b=>b.id!==action.after.id);
+  }
+  if(!safeSave()){bookings=snapshot;showSaveToast('Rückgängig konnte nicht sicher gespeichert werden.',false);update();return}
+  lastBookingUndo=null;showSaveToast('Änderung rückgängig gemacht.',false);update();
+}
+function deleteBooking(id){
+  const index=bookings.findIndex(b=>b.id===id);if(index<0)return;
+  const b=bookings[index],label=`${dateLabel(b.date)} · ${b.category} · ${euroCents(b.amountCents)}`;
+  if(!confirm(`Buchung wirklich löschen?\n\n${label}`))return;
+  const before=cloneBooking(b);bookings.splice(index,1);
+  if(!safeSave()){bookings.splice(index,0,before);alert('Die Buchung konnte nicht sicher gelöscht werden. Es wurde nichts verändert.');update();return}
+  lastBookingUndo={kind:'delete',before,index};update();showSaveToast('Buchung gelöscht.',true);
+}
+
+function addBooking(){
+  const editingId=document.getElementById('editingBookingId').value||null;
+  const type=document.getElementById('type').value,rawAmountCents=parseEuroToCents(document.getElementById('amount').value);
+  const amountCents=Number.isSafeInteger(rawAmountCents)?Math.abs(rawAmountCents):rawAmountCents;
+  const customCategory=document.getElementById('customCategory').value.trim();
+  const category=customCategory||document.getElementById('category').value,desc=document.getElementById('description').value.trim(),date=document.getElementById('bookingDate').value||isoToday();
+  const obligationInstanceId=type==='expense'?(document.getElementById('recurringLink').value||null):null;
+  if(!Number.isSafeInteger(amountCents)||amountCents<=0){showBookingError('Bitte einen gültigen Betrag eingeben, z. B. 100, 42,50, 1.234,56 oder −3.208 bei einer Ausgabe.');return false}
+  let recurringId=null,obligationPeriod=null;
+  if(obligationInstanceId){
+    const i=obligationInstances.find(o=>o.id===obligationInstanceId);if(!i){showBookingError('Die gewählte Verpflichtung wurde nicht gefunden.');return false}
+    recurringId=i.recurringId;obligationPeriod=i.dueDate.slice(0,7);
+  }
+
+  if(editingId){
+    const index=bookings.findIndex(b=>b.id===editingId);if(index<0){showBookingError('Die Buchung wurde nicht gefunden.');return false}
+    const before=cloneBooking(bookings[index]);
+    bookings[index]={...bookings[index],date,type,category,amountCents,desc,recurringId,obligationPeriod,obligationInstanceId};
+    if(!safeSave()){bookings[index]=before;showBookingError('Die Änderung konnte nicht sicher gespeichert werden. Es wurde nichts verändert.');update();return false}
+    lastBookingUndo={kind:'edit',before,after:cloneBooking(bookings[index])};
+    closeModal();update();showSection('bookings');showSaveToast('Buchung geändert.',true);return false;
+  }
+
+  const entry={id:uid('book'),date,type,category,amountCents,desc,recurringId,obligationPeriod,obligationInstanceId,createdAt:Date.now()};
+  bookings.push(entry);
+  if(!safeSave()){bookings.pop();showBookingError('Die Buchung konnte nicht sicher gespeichert werden. Es wurde nichts übernommen.');update();return false}
+  lastBookingUndo={kind:'create',after:cloneBooking(entry)};
+  closeModal();update();showSection('bookings');showSaveToast(`Gespeichert: ${category} · ${type==='income'?'+':'−'}${euroCents(amountCents)}`,true);return false;
+}
+
+
+
+function canonicalBackupState(state){
+  const clean={
+    schemaVersion:DATA_SCHEMA_VERSION,
+    bookings:(state.bookings||[]).map(normalizeBooking),
+    recurring:(state.recurring||[]).map(normalizeRecurring),
+    obligationInstances:(state.obligationInstances||[]).map(normalizeObligationInstance),
+    balanceAnchor:normalizeAnchor(state.balanceAnchor),
+    reconciliations:(state.reconciliations||[]).map(normalizeReconciliation)
+  };
+  const sortById=a=>a.slice().sort((x,y)=>String(x.id).localeCompare(String(y.id)));
+  clean.bookings=sortById(clean.bookings);
+  clean.recurring=sortById(clean.recurring);
+  clean.obligationInstances=sortById(clean.obligationInstances);
+  clean.reconciliations=sortById(clean.reconciliations);
+  return clean;
+}
+function backupRoundTripCheck(){
+  const original=canonicalBackupState({bookings,recurring,obligationInstances,balanceAnchor,reconciliations});
+  const exported=JSON.stringify(original);
+  const parsed=JSON.parse(exported);
+  const errors=validateStateStrict(parsed);
+  const restored=canonicalBackupState(parsed);
+  const identical=JSON.stringify(original)===JSON.stringify(restored);
+  const linksValid=restored.bookings.filter(b=>b.obligationInstanceId).every(b=>restored.obligationInstances.some(o=>o.id===b.obligationInstanceId));
+  return {ok:errors.length===0&&identical&&linksValid,errors,identical,linksValid,
+    counts:{bookings:restored.bookings.length,recurring:restored.recurring.length,instances:restored.obligationInstances.length,reconciliations:restored.reconciliations.length}};
+}
+
+function runSparFinoSelfTests(){
+  const failures=[],expect=(name,cond)=>{if(!cond)failures.push(name)};
+  // 2.33 Kritischer Kontoabgleich-/Lebenszyklus-Stresstest auf isolierten Kopien.
+  (function(){
+    const sr=recurring,si=obligationInstances,sb=bookings,sre=reconciliations,sba=balanceAnchor;
+    const sy=planningYear,sm=planningMonth,sk=planningKey,st=sparfinoTestToday;
+    try{
+      recurring=[];obligationInstances=[];bookings=[];reconciliations=[];balanceAnchor={month:'2026-09',amountCents:0};
+      planningYear=2026;planningMonth=9;planningKey='2026-09';sparfinoTestToday='2031-04-17';
+
+      // Buchung vor dem Abgleich ist im bestätigten Bankwert enthalten.
+      bookings.push({id:'pre',date:'2031-04-17',type:'expense',category:'Test',amountCents:1000,desc:'vor Abgleich',createdAt:100});
+      reconciliations.push(normalizeReconciliation({id:'r1',date:'2031-04-17',amountCents:50000,createdAt:200,bookingCutoffCreatedAt:100}));
+      expect('Stress Abgleich: Vor-Abgleich-Buchung nicht doppelt',currentAccountBalance()===50000);
+
+      // Neue Buchung am selben Tag nach dem Abgleich zählt weiter.
+      bookings.push({id:'post',date:'2031-04-17',type:'expense',category:'Test',amountCents:2500,desc:'nach Abgleich',createdAt:300});
+      expect('Stress Abgleich: Nach-Abgleich-Buchung zählt',currentAccountBalance()===47500);
+
+      // Bearbeiten einer alten Vor-Abgleich-Buchung behält createdAt und darf Kontowahrheit nicht rückwirkend verschieben.
+      bookings[0].amountCents=9000;
+      expect('Stress Abgleich: Bearbeitung alter Buchung ändert bestätigten Stand nicht',currentAccountBalance()===47500);
+
+      // Löschen einer Vor-Abgleich-Buchung ändert bestätigten Stand ebenfalls nicht.
+      bookings=bookings.filter(b=>b.id!=='pre');
+      expect('Stress Abgleich: Löschen alter Buchung ändert bestätigten Stand nicht',currentAccountBalance()===47500);
+
+      // Buchung nach Abgleich löschen muss dagegen exakt zurückgerechnet werden.
+      bookings=bookings.filter(b=>b.id!=='post');
+      expect('Stress Abgleich: Löschen neuer Buchung stellt Abgleichstand her',currentAccountBalance()===50000);
+
+      // Späterer Abgleich übernimmt die Wahrheit und danach zählen nur neue Buchungen.
+      bookings.push({id:'between',date:'2026-09-27',type:'expense',category:'Test',amountCents:1200,desc:'zwischen',createdAt:400});
+      sparfinoTestToday='2026-09-28';
+      reconciliations.push(normalizeReconciliation({id:'r2',date:'2026-09-28',amountCents:52000,createdAt:500,bookingCutoffCreatedAt:400}));
+      expect('Stress Abgleich: späterer Abgleich ersetzt Rechenkette',currentAccountBalance()===52000);
+      bookings.push({id:'after2',date:'2026-09-28',type:'income',category:'Test',amountCents:700,desc:'danach',createdAt:600});
+      expect('Stress Abgleich: Einnahme nach zweitem Abgleich zählt',currentAccountBalance()===52700);
+
+      // Lebenszyklus: Ende zwischen zwei Fälligkeiten erzeugt keine spätere Instanz.
+      recurring=[normalizeRecurring({id:'life',name:'Testvertrag',amountCents:4000,freq:1,due:'2026-09-15',payment:'Lastschrift',savedCents:0,category:'Test',effectiveFrom:'2026-09',activeUntil:'2026-10-20',endedAt:'2026-10-20'})];
+      obligationInstances=[];bookings=[];reconciliations=[];
+      planningYear=2026;planningMonth=11;planningKey='2026-11';sparfinoTestToday='2026-11-30';
+      // Generate from effective start explicitly by visiting September first.
+      planningYear=2026;planningMonth=9;planningKey='2026-09';ensureObligationInstances();
+      planningYear=2026;planningMonth=11;planningKey='2026-11';ensureObligationInstances();
+      expect('Stress Vertrag: September-Fälligkeit bleibt',obligationInstances.some(o=>o.recurringId==='life'&&o.dueDate==='2026-09-15'));
+      expect('Stress Vertrag: Oktober-Fälligkeit vor Enddatum bleibt',obligationInstances.some(o=>o.recurringId==='life'&&o.dueDate==='2026-10-15'));
+      expect('Stress Vertrag: nach Vertragsende keine November-Fälligkeit',!obligationInstances.some(o=>o.recurringId==='life'&&o.dueDate==='2026-11-15'));
+
+      // Bereits verknüpfte historische Zahlung bleibt auf existierender Instanz.
+      const oct=obligationInstances.find(o=>o.recurringId==='life'&&o.dueDate==='2026-10-15');
+      bookings.push({id:'lifepay',date:'2026-10-15',type:'expense',category:'Test',amountCents:4000,desc:'',recurringId:'life',obligationPeriod:'2026-10',obligationInstanceId:oct.id,createdAt:700});
+      expect('Stress Vertrag: verknüpfte Zahlung bleibt nachvollziehbar',bookings.filter(b=>b.obligationInstanceId).every(b=>obligationInstances.some(o=>o.id===b.obligationInstanceId)));
+      expect('Stress Vertrag: bezahlte Oktober-Fälligkeit ist geschlossen',openForInstance(oct,'2026-11-30')===0);
+    }finally{
+      recurring=sr;obligationInstances=si;bookings=sb;reconciliations=sre;balanceAnchor=sba;
+      planningYear=sy;planningMonth=sm;planningKey=sk;sparfinoTestToday=st;
+    }
+  })();
+
+
+  expect('Übersicht vorhanden',!!document.getElementById('overview'));
+  expect('Buchungsseite im Hauptinhalt',!!document.getElementById('bookings')?.closest('main.content'));
+  expect('Cent-Parser 42,50',parseEuroToCents('42,50')===4250);
+  expect('Cent-Parser 1.234,56',parseEuroToCents('1.234,56')===123456);
+  expect('Cent-Parser 1.234 deutsch',parseEuroToCents('1.234')===123400);
+  expect('Cent-Parser 0,01',parseEuroToCents('0,01')===1);
+  expect('Ungültig',Number.isNaN(parseEuroToCents('abc')));
+  expect('31.01 -> 28.02',dueDateInMonth({due:'2026-01-31',freq:1},2026,2)==='2026-02-28');
+  expect('Startmonat ist vom Ansichtsmonat getrennt',!balanceAnchor?.month||planningKey!==balanceAnchor.month||planningKey===monthKey(now.getFullYear(),now.getMonth()+1));
+  expect('Historische Instanzen dürfen ohne aktive Vorlage fortbestehen',obligationInstances.every(o=>!!o.id&&!!o.dueDate));
+  expect('Verknüpfte Buchungen zeigen auf existierende Instanzen',bookings.filter(b=>b.obligationInstanceId).every(b=>obligationInstances.some(o=>o.id===b.obligationInstanceId)));
+  expect('Kontostand-Abgleich ist keine Buchung',!bookings.some(b=>b.id==='synthetic-reconciliation-test'));
+  expect('HTML-Escaping für Detailansichten vorhanden',escapeHtml('<IG & Co>')==='&lt;IG &amp; Co&gt;');
+  expect('Detail-Monat kann formatiert werden',!!new Intl.DateTimeFormat('de-DE',{month:'long',year:'numeric'}).format(new Date(planningYear,planningMonth-1,1)));
+  expect('Detail-Summe offene Verpflichtungen stimmt',openCommitmentDetailRows().reduce((s,x)=>s+x.amount,0)===currentMonthCommitments());
+  expect('Detail-Summe Reserve stimmt',reserveDetailRows().reduce((s,x)=>s+x.amount,0)===futureReserve());
+  expect('Keine negativen Detailbeträge',openCommitmentDetailRows().every(x=>x.amount>0)&&reserveDetailRows().every(x=>x.amount>0));
+  expect('Keine doppelten Buchungs-IDs',new Set(bookings.map(b=>b.id)).size===bookings.length);
+  expect('Keine doppelten Verpflichtungs-IDs',new Set(obligationInstances.map(o=>o.id)).size===obligationInstances.length);
+  if(failures.length){
+    console.error('SparFino Systemcheck FEHLER:',failures);
+    const banner=document.getElementById('systemErrorBanner');
+    if(banner){banner.textContent='SparFino-Systemcheck fehlgeschlagen: '+failures.join(' · ');banner.style.display='block'}
+    return false;
+  }
+  console.info('SparFino 1.0 Verkaufsbeta · Systemcheck OK');return true;
+}
+
+document.getElementById('type').addEventListener('change',populateRecurringLink);
+document.getElementById('bookingDate').addEventListener('change',populateRecurringLink);
+document.getElementById('bookingForm').addEventListener('submit',e=>{e.preventDefault();addBooking()});
+document.getElementById('bookingDate').value=isoToday();
+update();
+try{
+  const migratedCount=localStorage.getItem('sparfino_migration_notice_v10final');
+  if(migratedCount){
+    localStorage.removeItem('sparfino_migration_notice_v10final');
+    showSaveToast(`Datenübernahme erfolgreich: ${migratedCount} Buchungen übernommen.`,false);
+  }
+}catch(e){}
+try{
+  runSparFinoSelfTests();
+}catch(e){
+  console.error('SparFino Systemcheck Laufzeitfehler:',e);
+  const banner=document.getElementById('systemErrorBanner');
+  if(banner){banner.textContent='SparFino-Systemcheck konnte nicht vollständig ausgeführt werden: '+String(e?.message||e);banner.style.display='block'}
+}
+</script>
+
+<script>
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script>
+
+</body>
+</html>
