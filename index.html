@@ -1911,7 +1911,7 @@ function runSparFinoSelfTests(){
     const sy=planningYear,sm=planningMonth,sk=planningKey,st=sparfinoTestToday;
     try{
       recurring=[];obligationInstances=[];bookings=[];reconciliations=[];balanceAnchor={month:'2026-09',amountCents:0};
-      planningYear=2026;planningMonth=9;planningKey='2026-09';sparfinoTestToday='2031-04-17';
+      planningYear=2031;planningMonth=4;planningKey='2031-04';sparfinoTestToday='2031-04-17';
 
       // Buchung vor dem Abgleich ist im bestätigten Bankwert enthalten.
       bookings.push({id:'pre',date:'2031-04-17',type:'expense',category:'Test',amountCents:1000,desc:'vor Abgleich',createdAt:100});
