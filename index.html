@@ -600,7 +600,7 @@ body{display:flex;justify-content:center;padding:22px}
       </div>
     </main>
 
-    <button class="booking-action" onclick="openModal()" title="Neue Buchung">
+    <button class="booking-action hidden" onclick="openModal()" title="Neue Buchung">
       <span class="booking-plus">+</span><span>Neue Buchung</span>
     </button>
   </section>
@@ -1781,7 +1781,7 @@ function showSection(id){
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
   const target=(id==='bookings')?'nav-bookings':(id==='fixed')?'nav-fixed':(id==='analysis')?'nav-analysis':'nav-overview';
   const btn=document.getElementById(target); if(btn) btn.classList.add('active');
-  const fab=document.querySelector('.add-btn');
+  const fab=document.querySelector('.booking-action');
   if(fab) fab.style.display = id==='bookings' ? 'none' : '';
 }
 function resetBookingForm(){
