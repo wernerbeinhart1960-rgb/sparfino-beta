@@ -2018,6 +2018,67 @@ try{
 if('serviceWorker' in navigator && location.protocol!=='file:'){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }
+
+function loescheFehlEintrag() {
+  const treffer = recurring.filter(r =>
+    r.name.trim().toLowerCase() === 'testvertraga'
+  );
+
+  if (treffer.length !== 1) {
+    alert('Testvertraga wurde nicht eindeutig gefunden. Nichts gelöscht.');
+    return;
+  }
+
+  const vertrag = treffer[0];
+  const faelligkeiten = obligationInstances.filter(
+    o => o.recurringId === vertrag.id
+  );
+
+  const hatBuchungen = bookings.some(b =>
+    b.recurringId === vertrag.id ||
+    faelligkeiten.some(o => o.id === b.obligationInstanceId)
+  );
+
+  const hatNachfolger = recurring.some(
+    r => r.predecessorId === vertrag.id
+  );
+
+  if (hatBuchungen || hatNachfolger) {
+    alert('Löschen gesperrt: Es bestehen verknüpfte Buchungen oder Vertragsänderungen.');
+    return;
+  }
+
+  const bestaetigt = confirm(
+    'Testvertraga und ' + faelligkeiten.length +
+    ' zugehörige Fälligkeiten dauerhaft löschen?\n\n' +
+    'Bitte vorher eine Sicherung exportieren.'
+  );
+
+  if (!bestaetigt) return;
+
+  const alteVertraege = recurring;
+  const alteFaelligkeiten = obligationInstances;
+
+  recurring = recurring.filter(r => r.id !== vertrag.id);
+  obligationInstances = obligationInstances.filter(
+    o => o.recurringId !== vertrag.id
+  );
+
+  if (!safeSave()) {
+    recurring = alteVertraege;
+    obligationInstances = alteFaelligkeiten;
+    alert('Speichern fehlgeschlagen. Nichts gelöscht.');
+    return;
+  }
+
+  update();
+  alert('Testvertraga und seine Fälligkeiten wurden gelöscht.');
+}
+
+if (recurring.some(r => r.name.trim().toLowerCase() === 'testvertraga')) document.getElementById('recurringList').insertAdjacentHTML('beforebegin', '<button type="button" class="secondary" onclick="loescheFehlEintrag()">Testvertraga endgültig löschen</button>');
+
+
+
 </script>
 
 </body>
